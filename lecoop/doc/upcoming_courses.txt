@@ -1,0 +1,18 @@
+SELECT 
+CASE step_type
+WHEN 'day' THEN IF(event < NOW(), event + INTERVAL step_length DAY, event)
+WHEN 'week' THEN IF(event < NOW(), event + INTERVAL step_length WEEK, event)
+WHEN 'month' THEN IF(event < NOW(), event + INTERVAL step_length MONTH, event)
+WHEN 'year' THEN IF(event < NOW(), event + INTERVAL step_length YEAR, event)
+END date
+FROM
+(SELECT 
+CASE step_type
+WHEN 'day' THEN FROM_UNIXTIME(start) + INTERVAL(CEIL((DATEDIFF(NOW(), FROM_UNIXTIME(start))) / step_length) * step_length) DAY
+WHEN 'week' THEN FROM_UNIXTIME(start) + INTERVAL(CEIL(((DATEDIFF(NOW(), FROM_UNIXTIME(start))/7)) / step_length) * step_length) WEEK
+WHEN 'month' THEN FROM_UNIXTIME(start) + INTERVAL(CEIL((PERIOD_DIFF(DATE_FORMAT(NOW(), '%y%m'), DATE_FORMAT(FROM_UNIXTIME(start), '%y%m'))) / step_length) * step_length) MONTH
+WHEN 'year' THEN FROM_UNIXTIME(start) + INTERVAL(CEIL((YEAR(NOW()) - YEAR(FROM_UNIXTIME(start))) / step_length) * step_length) YEAR
+END event,
+step_type,
+step_length
+FROM `schedule`) iv
