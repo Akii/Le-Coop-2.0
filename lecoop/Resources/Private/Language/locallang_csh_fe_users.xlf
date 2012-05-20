@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-05-59T16:16:59Z" product-name="lecoop">
+		<header/>
+		<body>
+
+			<trans-unit id="scheduleid.description">
+				<source>The schedule for the user (timetable)</source>
+			</trans-unit>
+			<trans-unit id="subscriptions.description">
+				<source>subscriptions</source>
+			</trans-unit>
+			<trans-unit id="viewed.description">
+				<source>viewed</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

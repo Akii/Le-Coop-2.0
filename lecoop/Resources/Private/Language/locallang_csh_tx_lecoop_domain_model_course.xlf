@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-05-59T16:16:59Z" product-name="lecoop">
+		<header/>
+		<body>
+
+			<trans-unit id="title.description">
+				<source>Title of the course</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>description</source>
+			</trans-unit>
+			<trans-unit id="scheduleid.description">
+				<source>Schedule for the course</source>
+			</trans-unit>
+			<trans-unit id="updates.description">
+				<source>updates</source>
+			</trans-unit>
+			<trans-unit id="tags.description">
+				<source>tags</source>
+			</trans-unit>
+			<trans-unit id="rating.description">
+				<source>rating</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

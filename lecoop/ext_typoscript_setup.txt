@@ -1,0 +1,21 @@
+config.tx_extbase{
+    persistence{
+        classes{
+
+            Tx_Extbase_Domain_Model_FrontendUser {
+                subclasses {
+                    Tx_Lecoop_User = Tx_Lecoop_Domain_Model_User
+					
+          		}
+            }
+
+            Tx_Lecoop_Domain_Model_User {
+                mapping {
+                    tableName = fe_users
+                    recordType = Tx_Lecoop_User
+                }
+            }
+            
+    	}
+    }
+}

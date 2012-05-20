@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-05-59T16:16:59Z" product-name="lecoop">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_lecoop_domain_model_course">
+				<source>Course</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.scheduleid">
+				<source>Scheduleid</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.updates">
+				<source>Updates</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.tags">
+				<source>Tags</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.rating">
+				<source>Rating</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_updates">
+				<source>Updates</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_updates.updateline">
+				<source>Updateline</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_tag">
+				<source>Tag</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_tag.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_tag.color">
+				<source>Color</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_user.scheduleid">
+				<source>Scheduleid</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_user.subscriptions">
+				<source>Subscriptions</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_user.viewed">
+				<source>Viewed</source>
+			</trans-unit>
+			
+			<trans-unit id="fe_users.tx_extbase_type.Tx_Lecoop_User">
+				<source>Le COOP 2.0 User</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_lecoop_domain_model_schedule">
+				<source>Schedule</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_schedule.start">
+				<source>Start</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_schedule.end">
+				<source>End</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_schedule.exceptions">
+				<source>Exceptions</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_schedule.events">
+				<source>Events</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_exception">
+				<source>Exception</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_exception.start">
+				<source>Start</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_exception.end">
+				<source>End</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_exception.allday">
+				<source>Allday</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_exception.reason">
+				<source>Reason</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_event">
+				<source>Event</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_event.start">
+				<source>Start</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_event.end">
+				<source>End</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_event.length">
+				<source>Length</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_event.steplength">
+				<source>Steplength</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_event.description">
+				<source>Description</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_rating">
+				<source>Rating</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_rating.rating">
+				<source>Rating</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_rating.userid">
+				<source>Userid</source>
+			</trans-unit>
+
+			<trans-unit id="tx_lecoop_domain_model_viewed">
+				<source>Viewed</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_viewed.timestamp">
+				<source>Timestamp</source>
+			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_viewed.courseid">
+				<source>Courseid</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
