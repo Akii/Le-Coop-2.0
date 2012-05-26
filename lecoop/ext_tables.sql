@@ -8,6 +8,10 @@ CREATE TABLE tx_lecoop_domain_model_course (
 
 	title varchar(255) DEFAULT '' NOT NULL,
 	description text NOT NULL,
+	type int(11) DEFAULT '0' NOT NULL,
+	featstart int(11) DEFAULT '0' NOT NULL,
+	featend int(11) DEFAULT '0' NOT NULL,
+	nextevent int(11) DEFAULT '0' NOT NULL,
 	scheduleid int(11) unsigned DEFAULT '0',
 	updates int(11) unsigned DEFAULT '0' NOT NULL,
 	tags int(11) unsigned DEFAULT '0' NOT NULL,

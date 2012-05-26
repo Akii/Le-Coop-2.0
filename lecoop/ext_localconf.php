@@ -14,6 +14,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	array(
 		'Course' => 'create, update, delete, ',
 		'User' => '',
+		'Schedule' => 'create, update, delete',
 		
 	)
 );
@@ -98,6 +99,20 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	// non-cacheable actions
 	array(
 		'Course' => 'usercourses',
+		
+	)
+);
+
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Listcourses',
+	array(
+		'Course' => 'list',
+		
+	),
+	// non-cacheable actions
+	array(
+		'Course' => 'list',
 		
 	)
 );

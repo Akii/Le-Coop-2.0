@@ -50,6 +50,35 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 	protected $description;
 
 	/**
+	 * Course/Learning group
+	 *
+	 * @var integer
+	 * @validate NotEmpty
+	 */
+	protected $type;
+
+	/**
+	 * featstart
+	 *
+	 * @var DateTime
+	 */
+	protected $featstart;
+
+	/**
+	 * featend
+	 *
+	 * @var DateTime
+	 */
+	protected $featend;
+
+	/**
+	 * nextevent
+	 *
+	 * @var DateTime
+	 */
+	protected $nextevent;
+
+	/**
 	 * Schedule for the course
 	 *
 	 * @var Tx_Lecoop_Domain_Model_Schedule
@@ -85,6 +114,20 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 	public function __construct() {
 		//Do not remove the next line: It would break the functionality
 		$this->initStorageObjects();
+		// init virtual attributes (next event)
+		$this->initVirtualAttributes();
+		
+		// make sure we have a schedule
+		$this->scheduleid = new Tx_Lecoop_Domain_Model_Schedule();
+	}
+	
+	/**
+	 * initializeObject
+	 *
+	 * @return void
+	 */
+	public function initializeObject() {
+		$this->initVirtualAttributes();
 	}
 
 	/**
@@ -103,6 +146,12 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
 		
 		$this->rating = new Tx_Extbase_Persistence_ObjectStorage();
+	}
+	
+	protected function initVirtualAttributes() {
+		// TO-DO: do it!
+		if($this->scheduleid !== NULL)
+			$this->setNextevent($this->scheduleid->getNextevent());
 	}
 
 	/**
@@ -141,6 +190,82 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 	 */
 	public function setDescription($description) {
 		$this->description = $description;
+	}
+
+	/**
+	 * Returns the type
+	 *
+	 * @return integer $type
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * Sets the type
+	 *
+	 * @param integer $type
+	 * @return void
+	 */
+	public function setType($type) {
+		$this->type = $type;
+	}
+
+	/**
+	 * Returns the featstart
+	 *
+	 * @return DateTime $featstart
+	 */
+	public function getFeatstart() {
+		return $this->featstart;
+	}
+
+	/**
+	 * Sets the featstart
+	 *
+	 * @param DateTime $featstart
+	 * @return void
+	 */
+	public function setFeatstart($featstart) {
+		$this->featstart = $featstart;
+	}
+
+	/**
+	 * Returns the featend
+	 *
+	 * @return DateTime $featend
+	 */
+	public function getFeatend() {
+		return $this->featend;
+	}
+
+	/**
+	 * Sets the featend
+	 *
+	 * @param DateTime $featend
+	 * @return void
+	 */
+	public function setFeatend($featend) {
+		$this->featend = $featend;
+	}
+
+	/**
+	 * Returns the nextevent
+	 *
+	 * @return DateTime $nextevent
+	 */
+	public function getNextevent() {
+		return $this->nextevent;
+	}
+
+	/**
+	 * Sets the nextevent
+	 *
+	 * @param DateTime $nextevent
+	 * @return void
+	 */
+	public function setNextevent($nextevent) {
+		$this->nextevent = $nextevent;
 	}
 
 	/**

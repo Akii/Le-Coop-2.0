@@ -1,4 +1,8 @@
 plugin.tx_lecoop {
+	settings {
+		userGrp = 0
+		tutorGrp = 0
+	}
 	view {
 		# cat=plugin.tx_lecoop/file; type=string; label=Path to template root (FE)
 		templateRootPath = EXT:lecoop/Resources/Private/Templates/
@@ -9,6 +13,6 @@ plugin.tx_lecoop {
 	}
 	persistence {
 		# cat=plugin.tx_lecoop//a; type=string; label=Default storage PID
-		storagePid = 
+		storagePid = 0
 	}
 }

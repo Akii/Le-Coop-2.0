@@ -42,7 +42,13 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Usercourses',
-	'Users Courses'
+	'User Courses'
+);
+
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
+	'Listcourses',
+	'List Courses'
 );
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Le COOP 2.0');

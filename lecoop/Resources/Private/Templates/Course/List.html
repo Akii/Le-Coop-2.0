@@ -20,6 +20,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	<tr>
 		<th><f:translate key="tx_lecoop_domain_model_course.title" /></th>
 		<th><f:translate key="tx_lecoop_domain_model_course.description" /></th>
+		<th><f:translate key="tx_lecoop_domain_model_course.type" /></th>
+		<th><f:translate key="tx_lecoop_domain_model_course.featstart" /></th>
+		<th><f:translate key="tx_lecoop_domain_model_course.featend" /></th>
+		<th><f:translate key="tx_lecoop_domain_model_course.nextevent" /></th>
 		<th> </th>
 		<th> </th>
 	</tr>
@@ -28,6 +32,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		<tr>
 			<td><f:link.action action="show" arguments="{course : course}"> {course.title}</f:link.action></td>
 			<td><f:link.action action="show" arguments="{course : course}"> {course.description}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{course : course}"> {course.type}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{course : course}"> {course.featstart -> f:format.date()}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{course : course}"> {course.featend -> f:format.date()}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{course : course}"> {course.nextevent -> f:format.date()}</f:link.action></td>
 			<td><f:link.action action="edit" arguments="{course : course}">Edit</f:link.action></td>
 			<td><f:link.action action="delete" arguments="{course : course}">Delete</f:link.action></td>
 		</tr>

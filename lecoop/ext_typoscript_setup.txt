@@ -3,19 +3,19 @@ config.tx_extbase{
         classes{
 
             Tx_Extbase_Domain_Model_FrontendUser {
+            	mapping {
+            		recordType = 
+            		tableName = fe_users
+            	}
                 subclasses {
                     Tx_Lecoop_User = Tx_Lecoop_Domain_Model_User
 					
           		}
             }
-
-            Tx_Lecoop_Domain_Model_User {
-                mapping {
-                    tableName = fe_users
-                    recordType = Tx_Lecoop_User
-                }
-            }
             
+            Tx_Extbase_Domain_Model_FrontendUserGroup {
+            	mapping.recordType = 
+            }
     	}
     }
 }

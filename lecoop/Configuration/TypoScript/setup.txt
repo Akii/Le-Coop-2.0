@@ -1,4 +1,8 @@
 plugin.tx_lecoop {
+	settings {
+		userGrp = {$plugin.tx_lecoop.settings.userGrp}
+		tutorGrp = {$plugin.tx_lecoop.settings.tutorGrp}
+	}
 	view {
 		templateRootPath = {$plugin.tx_lecoop.view.templateRootPath}
 		partialRootPath = {$plugin.tx_lecoop.view.partialRootPath}
@@ -6,6 +10,14 @@ plugin.tx_lecoop {
 	}
 	persistence {
 		storagePid = {$plugin.tx_lecoop.persistence.storagePid}
+			
+		classes {
+            Tx_Lecoop_Domain_Model_User {
+                mapping {
+                    tableName = fe_users
+                }
+            }
+        }
 	}
 }
 

@@ -39,6 +39,13 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 * @var Tx_Lecoop_Domain_Repository_CourseRepository
 	 */
 	protected $courseRepository;
+	
+	/**
+	 * usergroupRepository
+	 *
+	 * @var Tx_Extbase_Domain_Repository_FrontendUserGroupRepository
+	 */
+	protected $usergroupRepository;
 
 	/**
 	 * injectCourseRepository
@@ -48,6 +55,31 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 */
 	public function injectCourseRepository(Tx_Lecoop_Domain_Repository_CourseRepository $courseRepository) {
 		$this->courseRepository = $courseRepository;
+	}
+	
+	/**
+	 * injectUsergroupRepository
+	 *
+	 * @var Tx_Extbase_Domain_Repository_FrontendUserGroupRepository $usergroupRepository
+	 * @return void
+	 */
+	public function injectUsergroupRepository(Tx_Extbase_Domain_Repository_FrontendUserGroupRepository $usergroupRepository) {
+		$this->usergroupRepository = $usergroupRepository;
+	}
+
+	public function initializeAction() {
+		parent::initializeAction();
+		
+		$this->injectUsergroupRepository(
+			t3lib_div::makeInstance('Tx_Extbase_Domain_Repository_FrontendUserGroupRepository')
+		);
+	}
+	
+	public function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
+		parent::initializeView($view);
+		
+		$this->view->assign('userGrp', $this->usergroupRepository->findByUid($this->settings['userGrp']));
+		$this->view->assign('tutorGrp', $this->usergroupRepository->findByUid($this->settings['tutorGrp']));
 	}
 
 	/**

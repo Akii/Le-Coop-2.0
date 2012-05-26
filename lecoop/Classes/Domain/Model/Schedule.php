@@ -205,5 +205,12 @@ class Tx_Lecoop_Domain_Model_Schedule extends Tx_Extbase_DomainObject_AbstractEn
 		$this->events = $events;
 	}
 
+	/**
+	 * @return boolean
+	 */
+	public function getNextevent() {
+		return NULL;
+	}
+
 }
 ?>

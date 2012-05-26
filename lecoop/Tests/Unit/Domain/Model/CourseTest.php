@@ -87,6 +87,58 @@ class Tx_Lecoop_Domain_Model_CourseTest extends Tx_Extbase_Tests_Unit_BaseTestCa
 	/**
 	 * @test
 	 */
+	public function getTypeReturnsInitialValueForInteger() { 
+		$this->assertSame(
+			0,
+			$this->fixture->getType()
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function setTypeForIntegerSetsType() { 
+		$this->fixture->setType(12);
+
+		$this->assertSame(
+			12,
+			$this->fixture->getType()
+		);
+	}
+	
+	/**
+	 * @test
+	 */
+	public function getFeatstartReturnsInitialValueForDateTime() { }
+
+	/**
+	 * @test
+	 */
+	public function setFeatstartForDateTimeSetsFeatstart() { }
+	
+	/**
+	 * @test
+	 */
+	public function getFeatendReturnsInitialValueForDateTime() { }
+
+	/**
+	 * @test
+	 */
+	public function setFeatendForDateTimeSetsFeatend() { }
+	
+	/**
+	 * @test
+	 */
+	public function getNexteventReturnsInitialValueForDateTime() { }
+
+	/**
+	 * @test
+	 */
+	public function setNexteventForDateTimeSetsNextevent() { }
+	
+	/**
+	 * @test
+	 */
 	public function getScheduleidReturnsInitialValueForTx_Lecoop_Domain_Model_Schedule() { 
 		$this->assertEquals(
 			NULL,

@@ -15,4 +15,36 @@
 			{course.description}
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<f:translate key="tx_lecoop_domain_model_course.type" />
+		</td>
+		<td>
+			{course.type}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<f:translate key="tx_lecoop_domain_model_course.featstart" />
+		</td>
+		<td>
+			{course.featstart -> f:format.date()}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<f:translate key="tx_lecoop_domain_model_course.featend" />
+		</td>
+		<td>
+			{course.featend -> f:format.date()}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<f:translate key="tx_lecoop_domain_model_course.nextevent" />
+		</td>
+		<td>
+			{course.nextevent -> f:format.date()}
+		</td>
+	</tr>
 </table>

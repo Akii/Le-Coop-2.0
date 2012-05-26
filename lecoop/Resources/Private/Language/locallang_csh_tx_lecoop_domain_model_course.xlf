@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2012-05-59T16:16:59Z" product-name="lecoop">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-05-45T15:33:45Z" product-name="lecoop">
 		<header/>
 		<body>
 
@@ -9,6 +9,18 @@
 			</trans-unit>
 			<trans-unit id="description.description">
 				<source>description</source>
+			</trans-unit>
+			<trans-unit id="type.description">
+				<source>Course/Learning group</source>
+			</trans-unit>
+			<trans-unit id="featstart.description">
+				<source>featstart</source>
+			</trans-unit>
+			<trans-unit id="featend.description">
+				<source>featend</source>
+			</trans-unit>
+			<trans-unit id="nextevent.description">
+				<source>nextevent</source>
 			</trans-unit>
 			<trans-unit id="scheduleid.description">
 				<source>Schedule for the course</source>

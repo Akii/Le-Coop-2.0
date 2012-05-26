@@ -1,0 +1,8 @@
+<label for="start">
+	<f:translate key="tx_lecoop_domain_model_schedule.start" /> <span class="required">(required)</span>
+</label><br />
+	<f:form.textfield property="start"  value="{schedule.start->f:format.date()}" /><br />
+<label for="end">
+	<f:translate key="tx_lecoop_domain_model_schedule.end" /> <span class="required">(required)</span>
+</label><br />
+	<f:form.textfield property="end"  value="{schedule.end->f:format.date()}" /><br />
