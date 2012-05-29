@@ -46,6 +46,13 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 * @var Tx_Extbase_Domain_Repository_FrontendUserGroupRepository
 	 */
 	protected $usergroupRepository;
+	
+	/**
+	 * userRepository
+	 *
+	 * @var Tx_Lecoop_Domain_Repository_UserRepository
+	 */
+	protected $userRepository;
 
 	/**
 	 * injectCourseRepository
@@ -66,12 +73,26 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	public function injectUsergroupRepository(Tx_Extbase_Domain_Repository_FrontendUserGroupRepository $usergroupRepository) {
 		$this->usergroupRepository = $usergroupRepository;
 	}
+	
+	/**
+	 * injectUserRepository
+	 *
+	 * @var Tx_Lecoop_Domain_Repository_UserRepository $userRepository
+	 * @return void
+	 */
+	public function injectUserRepository(Tx_Lecoop_Domain_Repository_UserRepository $userRepository) {
+		$this->userRepository = $userRepository;
+	}
 
 	public function initializeAction() {
 		parent::initializeAction();
 		
 		$this->injectUsergroupRepository(
 			t3lib_div::makeInstance('Tx_Extbase_Domain_Repository_FrontendUserGroupRepository')
+		);
+		
+		$this->injectUserRepository(
+			t3lib_div::makeInstance('Tx_Lecoop_Domain_Repository_UserRepository')
 		);
 	}
 	
@@ -110,6 +131,23 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 * @return void
 	 */
 	public function newAction(Tx_Lecoop_Domain_Model_Course $newCourse = NULL) {
+		if($newCourse === NULL) {
+			$newCourse = t3lib_div::makeInstance('Tx_Lecoop_Domain_Model_Course');
+		}
+		
+		if($newCourse->getOwnerid() === NULL) {
+			// get instance of Tx_Lecoop_Domain_Model_User for the owner
+			$owner = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+			
+			if($owner == NULL) {
+				$this->flashMessageContainer->add('You discovered a bug, yay! Theoretically you should never see this.. oh well >_> here, have a cookie!');
+				$this->redirect('featured');
+			}
+			
+			$newCourse->setOwnerid($owner);
+		}
+		
+	
 		$this->view->assign('newCourse', $newCourse);
 	}
 
@@ -120,9 +158,16 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 * @return void
 	 */
 	public function createAction(Tx_Lecoop_Domain_Model_Course $newCourse) {
+		
+	
 		$this->courseRepository->add($newCourse);
 		$this->flashMessageContainer->add('Your new Course was created.');
-		$this->redirect('list');
+		
+		// we have to persist the object at this point to be able to redirect to edit
+		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+		$persistenceManager->persistAll();
+		
+		$this->redirect('edit', null, null, array('course' => $newCourse));
 	}
 
 	/**
@@ -165,7 +210,8 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_Ac
 	 * @return void
 	 */
 	public function featuredAction() {
-
+		$featured = $this->courseRepository->findFeatured();
+		$this->view->assign('courses', $featured);
 	}
 
 	/**

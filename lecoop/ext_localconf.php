@@ -5,44 +5,14 @@ if (!defined('TYPO3_MODE')) {
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
-	'Featured',
+	'Course',
 	array(
-		'Course' => 'featured',
+		'Course' => 'featured, new, create, edit, show, search',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Course' => 'create, update, delete, ',
-		'User' => '',
-		'Schedule' => 'create, update, delete',
-		
-	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Search',
-	array(
-		'Course' => 'search',
-		
-	),
-	// non-cacheable actions
-	array(
-		'Course' => 'search',
-		
-	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Create',
-	array(
-		'Course' => 'new, create',
-		
-	),
-	// non-cacheable actions
-	array(
-		'Course' => 'new, create',
+		'Course' => 'new, create, edit, search',
 		
 	)
 );
@@ -65,26 +35,12 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Ucp',
 	array(
-		'User' => 'ucp',
+		'User' => 'ucp, schedule, settings',
 		
 	),
 	// non-cacheable actions
 	array(
-		'User' => 'ucp',
-		
-	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Settings',
-	array(
-		'User' => 'settings',
-		
-	),
-	// non-cacheable actions
-	array(
-		'User' => 'settings',
+		'User' => 'ucp, schedule, settings',
 		
 	)
 );
@@ -103,6 +59,8 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
+
+// for testing purposes only
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Listcourses',

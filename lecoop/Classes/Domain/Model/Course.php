@@ -34,6 +34,14 @@
 class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
+	 * Owner of the course
+	 *
+	 * @var Tx_Lecoop_Domain_Model_User
+	 * @validate NotEmpty
+	 */
+	protected $ownerid;
+	
+	/**
 	 * Title of the course
 	 *
 	 * @var string
@@ -142,9 +150,7 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 		 * You may modify the constructor of this class instead
 		 */
 		$this->updates = new Tx_Extbase_Persistence_ObjectStorage();
-		
 		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
-		
 		$this->rating = new Tx_Extbase_Persistence_ObjectStorage();
 	}
 	
@@ -153,6 +159,17 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 		if($this->scheduleid !== NULL)
 			$this->setNextevent($this->scheduleid->getNextevent());
 	}
+
+	/**
+	 * @return Tx_Lecoop_Domain_Model_User
+	 */
+	public function getOwnerid() { return $this->ownerid; }
+	
+	/**
+	 * @param Tx_Lecoop_Domain_Model_User $owner
+	 * @return void
+	 */
+	public function setOwnerid(Tx_Lecoop_Domain_Model_User $owner) { $this->ownerid = $owner; }
 
 	/**
 	 * Returns the title

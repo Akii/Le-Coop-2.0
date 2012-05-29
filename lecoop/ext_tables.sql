@@ -6,6 +6,7 @@ CREATE TABLE tx_lecoop_domain_model_course (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	ownerid int(11) unsigned DEFAULT '0',
 	title varchar(255) DEFAULT '' NOT NULL,
 	description text NOT NULL,
 	type int(11) DEFAULT '0' NOT NULL,

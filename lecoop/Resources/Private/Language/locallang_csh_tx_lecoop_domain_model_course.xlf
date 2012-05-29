@@ -4,6 +4,9 @@
 		<header/>
 		<body>
 
+			<trans-unit id="ownerid.description">
+				<source>fe_user who owns the course</source>
+			</trans-unit>
 			<trans-unit id="title.description">
 				<source>Title of the course</source>
 			</trans-unit>

@@ -5,20 +5,8 @@ if (!defined('TYPO3_MODE')) {
 
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
-	'Featured',
-	'Featured'
-);
-
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Search',
-	'Search'
-);
-
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Create',
-	'Create New Course'
+	'Course',
+	'Course Plugin'
 );
 
 Tx_Extbase_Utility_Extension::registerPlugin(
@@ -48,7 +36,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Listcourses',
-	'List Courses'
+	'[TEST] List Courses'
 );
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Le COOP 2.0');

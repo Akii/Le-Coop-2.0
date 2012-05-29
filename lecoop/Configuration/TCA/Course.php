@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_lecoop_domain_model_course'] = array(
 	'ctrl' => $TCA['tx_lecoop_domain_model_course']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, type, featstart, featend, nextevent, scheduleid, updates, tags, rating',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, ownerid, title, description, type, featstart, featend, nextevent, scheduleid, updates, tags, rating',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title, description, type, featstart, featend, nextevent, scheduleid, updates, tags, rating,--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, ownerid, title, description, type, featstart, featend, nextevent, scheduleid, updates, tags, rating,--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -90,6 +90,23 @@ $TCA['tx_lecoop_domain_model_course'] = array(
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+		'ownerid' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:lecoop/Resources/Private/Language/locallang_db.xml:tx_lecoop_domain_model_course.ownerid',
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => 'fe_users',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
 				),
 			),
 		),

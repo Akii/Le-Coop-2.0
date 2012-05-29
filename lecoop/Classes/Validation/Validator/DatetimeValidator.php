@@ -31,24 +31,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_Lecoop_Domain_Repository_CourseRepository extends Tx_Extbase_Persistence_Repository {
+class Tx_Lecoop_Validation_Validator_DatetimeValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
-	/**
-	 * findFeatured
-	 *
-	 * finds all featured courses
-	 */
-	public function findFeatured() {
-		$query = $this->createQuery();
-		
-		return $query
-			->matching(
-				$query->logicalAnd(
-					$query->greaterThanOrEqual('featstart', TIME()),
-					$query->lessThanOrEqual('featend', TIME())
-				)
-			)
-			->execute();
+	public function isValid($value) {
+		return false;
 	}
+	
 }
 ?>

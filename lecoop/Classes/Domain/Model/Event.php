@@ -37,7 +37,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	 * start
 	 *
 	 * @var DateTime
-	 * @validate NotEmpty
+	 * @validate Tx_Lecoop_Validation_Validator_DatetimeValidator
 	 */
 	protected $start;
 
@@ -52,7 +52,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	/**
 	 * length
 	 *
-	 * @var int
+	 * @var DateTime
 	 * @validate NotEmpty
 	 */
 	protected $length;
@@ -112,7 +112,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	/**
 	 * Returns the length
 	 *
-	 * @return int $length
+	 * @return DateTime $length
 	 */
 	public function getLength() {
 		return $this->length;
@@ -121,7 +121,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	/**
 	 * Sets the length
 	 *
-	 * @param int $length
+	 * @param DateTime $length
 	 * @return void
 	 */
 	public function setLength($length) {

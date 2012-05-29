@@ -20,23 +20,3 @@ plugin.tx_lecoop {
         }
 	}
 }
-
-plugin.tx_lecoop._CSS_DEFAULT_STYLE (
-	input.f3-form-error {
-		background-color:#FF9F9F;
-		border: 1px #FF0000 solid;
-	}
-
-	.tx-lecoop table {
-		border-collapse:separate;
-		border-spacing:10px;
-	}
-
-	.tx-lecoop table th {
-		font-weight:bold;
-	}
-
-	.tx-lecoop table td {
-		vertical-align:top;
-	}
-)

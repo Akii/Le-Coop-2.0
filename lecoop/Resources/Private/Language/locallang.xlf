@@ -7,6 +7,9 @@
 			<trans-unit id="tx_lecoop_domain_model_course">
 				<source>Course Object</source>
 			</trans-unit>
+			<trans-unit id="tx_lecoop_domain_model_course.ownerid">
+				<source>Owner of the course</source>
+			</trans-unit>
 			<trans-unit id="tx_lecoop_domain_model_course.title">
 				<source>Title of the course</source>
 			</trans-unit>

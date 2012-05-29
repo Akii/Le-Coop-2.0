@@ -1,3 +1,4 @@
+{namespace vh = Tx_Lecoop_ViewHelpers}
 <f:layout name="Default" />
 
 This template displays a NEW form for the current domain object.
@@ -15,7 +16,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <h2>Create New Course</h2>
 <br/>
 
-<f:flashMessages />
+<vh:flashMessages />
 
 <f:render partial="FormErrors" arguments="{object:Course}"/>
 
@@ -23,23 +24,16 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		<f:form class="form-horizontal" action="create" name="newCourse" object="{newCourse}">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#tab1" data-toggle="tab">General</a></li>
-			<li><a href="#tab2" data-toggle="tab">Schedule</a></li>
-			<li><a href="#tab3" data-toggle="tab">Exceptions</a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="tab1">
 				<f:render partial="Course/FormFields" arguments="{tutorGrp: '{tutorGrp}'}"/>
 			</div>
-			<div class="tab-pane" id="tab2">
-				<f:render partial="Course/ScheduleFields" arguments="{course: '{newCourse}'}" />
-			</div>
-			<div class="tab-pane" id="tab3">
-				Exceptions thingy
-			</div>
 		</div>
 	</div>
 	
 	<div class="form-actions">
+		<f:form.hidden property="ownerid" />
 		<f:form.submit class="btn btn-primary" value="Create Course" />
 	</div>
 </f:form>

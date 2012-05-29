@@ -206,9 +206,20 @@ class Tx_Lecoop_Domain_Model_Schedule extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
-	 * @return boolean
+	 * @return DateTime
 	 */
 	public function getNextevent() {
+		if(count($this->events)) {
+			$events = array();
+			foreach($this->events as $event) {
+				if($date = $event->getNextevent())
+					$events[] = $date;
+			}
+			
+			if(count($events)) sort($events);
+			return array_shift($events);
+		}
+	
 		return NULL;
 	}
 
