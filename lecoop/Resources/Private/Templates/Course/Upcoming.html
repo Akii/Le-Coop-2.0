@@ -1,0 +1,9 @@
+<f:layout name="DefaultNoFrame" />
+<f:section name="main">
+    <ul class="course_link">
+	<f:for each="{courses}" as="course">
+	    <f:render partial="Course/CourseLinkItem" arguments="{course: '{course}'}" />
+	</f:for>
+    </ul>
+    <f:debug>{courses}</f:debug>
+</f:section>

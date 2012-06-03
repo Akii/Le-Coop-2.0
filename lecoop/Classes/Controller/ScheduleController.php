@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -31,74 +31,81 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_Lecoop_Controller_ScheduleController extends Tx_Extbase_MVC_Controller_ActionController {
+class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_AbstractController {
 
-	/**
-	 * action show
-	 *
-	 * @param $schedule
-	 * @return void
-	 */
-	public function showAction(Tx_Lecoop_Domain_Model_Schedule $schedule) {
-		$this->view->assign('schedule', $schedule);
-	}
+    /**
+     * courseRepository
+     *
+     * @var Tx_Lecoop_Domain_Repository_ScheduleRepository
+     */
+    protected $scheduleRepository;
 
-	/**
-	 * action new
-	 *
-	 * @param $newSchedule
-	 * @dontvalidate $newSchedule
-	 * @return void
-	 */
-	public function newAction(Tx_Lecoop_Domain_Model_Schedule $newSchedule = NULL) {
-		$this->view->assign('newSchedule', $newSchedule);
-	}
+    /**
+     * injectCourseRepository
+     *
+     * @param Tx_Lecoop_Domain_Repository_ScheduleRepository $scheduleRepository
+     * @return void
+     */
+    public function injectScheduleRepository(Tx_Lecoop_Domain_Repository_ScheduleRepository $scheduleRepository) {
+	$this->scheduleRepository = $scheduleRepository;
+    }
 
-	/**
-	 * action create
-	 *
-	 * @param $newSchedule
-	 * @return void
-	 */
-	public function createAction(Tx_Lecoop_Domain_Model_Schedule $newSchedule) {
-		$this->scheduleRepository->add($newSchedule);
-		$this->flashMessageContainer->add('Your new Schedule was created.');
-		$this->redirect('list');
-	}
+    /**
+     * action update
+     *
+     * @param $schedule
+     * @param $course
+     * @return void
+     */
+    public function updateAction(Tx_Lecoop_Domain_Model_Schedule $schedule, Tx_Lecoop_Domain_Model_Course $course) {
+	$this->scheduleRepository->update($schedule);
+	$this->flashMessageContainer->add('Your Schedule was updated.');
+	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
+    }
 
-	/**
-	 * action edit
-	 *
-	 * @param $schedule
-	 * @return void
-	 */
-	public function editAction(Tx_Lecoop_Domain_Model_Schedule $schedule) {
-		$this->view->assign('schedule', $schedule);
+    /**
+     * action newEvent
+     *
+     * @param Tx_Lecoop_Domain_Model_Event $event
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @dontvalidate $event
+     * @return void
+     */
+    public function newEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event = NULL) {
+	$permissions = $this->getPermissions($course);
+	if($permissions['update'] !== true) {
+	    $this->flashMessages->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('show', 'Course', NULL, array('course' => $course));
 	}
+	
+	$this->view->assign('event', $event);
+	$this->view->assign('course', $course);
+    }
 
-	/**
-	 * action update
-	 *
-	 * @param $schedule
-	 * @return void
-	 */
-	public function updateAction(Tx_Lecoop_Domain_Model_Schedule $schedule) {
-		$this->scheduleRepository->update($schedule);
-		$this->flashMessageContainer->add('Your Schedule was updated.');
-		$this->redirect('list');
+    /**
+     * action create
+     *
+     * @param Tx_Lecoop_Domain_Model_Event $event
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @return void
+     */
+    public function createEventAction(Tx_Lecoop_Domain_Model_Event $event, Tx_Lecoop_Domain_Model_Course $course) {
+	$permissions = $this->getPermissions($course);
+	if($permissions['update'] !== true) {
+	    $this->flashMessages->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('show', 'Course', NULL, array('course' => $course));
 	}
-
-	/**
-	 * action delete
-	 *
-	 * @param $schedule
-	 * @return void
-	 */
-	public function deleteAction(Tx_Lecoop_Domain_Model_Schedule $schedule) {
-		$this->scheduleRepository->remove($schedule);
-		$this->flashMessageContainer->add('Your Schedule was removed.');
-		$this->redirect('list');
-	}
+	
+	$schedule = $course->getScheduleid();
+	
+	$schedule->addEvent($event);
+	$this->scheduleRepository->update($schedule);
+	
+	$this->flashMessageContainer->add('Your new Event was created.');
+	
+	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
+    }
 
 }
+
 ?>

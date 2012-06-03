@@ -37,7 +37,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	 * start
 	 *
 	 * @var DateTime
-	 * @validate Tx_Lecoop_Validation_Validator_DatetimeValidator
+	 * @validate NotEmpty
 	 */
 	protected $start;
 
@@ -166,5 +166,97 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 		$this->description = $description;
 	}
 
+	/**
+	 * Gets the next event date
+	 * 
+	 * @return DateTime Returns the next event. Null in case there is no next event.
+	 */
+	public function getNextEvent() {
+	    // event outdated
+	    if(time() > $this->end->getTimestamp())
+		return NULL;
+	    
+	    // no repetition
+	    if($this->steplength == 0) {
+		return $this->start;
+	    } else {
+		$events = $this->findEvents();
+		
+		// linear search should suffice
+		foreach($events as $event) {
+		    if($event->getTimestamp() > time()) return $event;
+		}
+	    }
+	    
+	    return NULL;
+	}
+	
+	/**
+	 * Gets the number of events
+	 * 
+	 * @param boolean $calc_remain If true will only return the number of events left
+	 * @return int 
+	 */
+	public function getCalcEvents($calc_remain = false) {
+	    // if the event is outdated we don't need to calc anything
+	    if(time() > $this->end->getTimestamp())
+		return 0;
+	    
+	    $events = $this->findEvents();
+	    
+	    if(!$calc_remain)
+		return count($events);
+	    
+	    foreach($events as $key => $value) {
+		if($value->getTimestamp() > time()) {
+		    // 1st item true = count()
+		    // 2nd item true = count()-1
+		    // ...
+		    // no item true = 0
+		    return (count($events) - $key);
+		}
+	    }
+	    
+	    return 0;
+	}
+	
+	/**
+	 * Gets the remaining number of events
+	 * (because i'm incapable of passing params through fluid, someone tell me how plz
+	 * 
+	 * @return int 
+	 */
+	public function getCalcRemEvents() { return $this->getCalcEvents(true); }
+	
+	/**
+	 * Calculates all events
+	 * 
+	 * @return array<string> Sorted array containing all dates
+	 */
+	protected function findEvents() {
+	    if($this->start == NULL || $this->end == NULL)
+		return array();
+	    
+	    // only need to calculate if not outdated and steplength > 0
+	    // as we don't yet validate that start < end we have to do it manually
+	    // to not run into a loop
+	    $start = $this->start->getTimestamp();
+	    $end = $this->end->getTimestamp();
+	    
+	    if(time() > $end || $this->steplength == 0 || $start > $end)
+		return array();
+	    
+	    $out = array();
+	    
+	    $curr = $start;
+	    $step = '+'.$this->steplength.' day';
+	    
+	    while($curr < $end) {
+		$out[] = new DateTime(date('m/d/y H:i', $curr));
+		$curr = strtotime($step, $curr);
+	    }
+	    
+	    return $out;
+	}
 }
 ?>

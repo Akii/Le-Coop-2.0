@@ -31,25 +31,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_Lecoop_Controller_UserController extends Tx_Lecoop_Controller_AbstractController {
-
-	/**
-	 * action settings
-	 *
-	 * @return void
-	 */
-	public function settingsAction() {
-
-	}
-
-	/**
-	 * action ucp
-	 *
-	 * @return void
-	 */
-	public function ucpAction() {
-
-	}
-
+class Tx_Lecoop_Domain_Repository_ScheduleRepository extends Tx_Extbase_Persistence_Repository {
 }
 ?>

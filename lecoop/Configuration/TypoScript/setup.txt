@@ -2,6 +2,8 @@ plugin.tx_lecoop {
 	settings {
 		userGrp = {$plugin.tx_lecoop.settings.userGrp}
 		tutorGrp = {$plugin.tx_lecoop.settings.tutorGrp}
+
+                coursesPageUid = {$plugin.tx_lecoop.settings.coursesPageUid}
 	}
 	view {
 		templateRootPath = {$plugin.tx_lecoop.view.templateRootPath}

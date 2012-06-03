@@ -208,7 +208,7 @@ class Tx_Lecoop_Domain_Model_Schedule extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * @return DateTime
 	 */
-	public function getNextevent() {
+	public function getNextEvent() {
 		if(count($this->events)) {
 			$events = array();
 			foreach($this->events as $event) {

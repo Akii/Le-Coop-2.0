@@ -1,0 +1,24 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+    <h1>Edit Course</h1>
+    <br/>
+
+    <f:flashMessages renderMode="div" />
+
+    <f:render partial="FormErrors" arguments="{object:course}"/>
+
+
+    <div class="tabbable tabs-left">
+	<ul class="nav nav-tabs">
+	    <li class=""><f:link.action controller="Course" action="edit" arguments="{course: '{course}'}">General</f:link.action></li>
+	    <li class="active"><a href="#tab2" data-toggle="tab">Schedule</a></li>
+	    <li class=""><f:link.action controller="Course" action="edit" arguments="{course: '{course}', activeTab: 3}">Exceptions</f:link.action></li>
+	</ul>
+	<div class="tab-content">
+	    <div class="tab-pane active" id="tab2">
+		<f:render partial="Schedule/NewEvent" arguments="{course: '{course}', event: '{event}'}"/>
+	    </div>
+	</div>
+    </div>
+</f:section>

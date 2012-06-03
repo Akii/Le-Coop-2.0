@@ -2,6 +2,8 @@ plugin.tx_lecoop {
 	settings {
 		userGrp = 0
 		tutorGrp = 0
+
+                coursesPageUid = 0
 	}
 	view {
 		# cat=plugin.tx_lecoop/file; type=string; label=Path to template root (FE)

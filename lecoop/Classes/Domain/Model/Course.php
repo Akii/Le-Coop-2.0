@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -33,393 +33,367 @@
  */
 class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEntity {
 
-	/**
-	 * Owner of the course
-	 *
-	 * @var Tx_Lecoop_Domain_Model_User
-	 * @validate NotEmpty
-	 */
-	protected $ownerid;
-	
-	/**
-	 * Title of the course
-	 *
-	 * @var string
-	 * @validate NotEmpty
-	 */
-	protected $title;
+    const LGRP = 0;
+    const COURSE = 1;
 
-	/**
-	 * description
-	 *
-	 * @var string
-	 * @validate NotEmpty
-	 */
-	protected $description;
+    /**
+     * Owner of the course
+     *
+     * @var Tx_Lecoop_Domain_Model_User
+     * @validate NotEmpty
+     */
+    protected $ownerid;
 
-	/**
-	 * Course/Learning group
-	 *
-	 * @var integer
-	 * @validate NotEmpty
-	 */
-	protected $type;
+    /**
+     * Title of the course
+     *
+     * @var string
+     * @validate NotEmpty
+     */
+    protected $title;
 
-	/**
-	 * featstart
-	 *
-	 * @var DateTime
-	 */
-	protected $featstart;
+    /**
+     * description
+     *
+     * @var string
+     * @validate NotEmpty
+     */
+    protected $description;
 
-	/**
-	 * featend
-	 *
-	 * @var DateTime
-	 */
-	protected $featend;
+    /**
+     * Course/Learning group
+     *
+     * @var integer
+     * @validate NotEmpty
+     */
+    protected $type;
 
-	/**
-	 * nextevent
-	 *
-	 * @var DateTime
-	 */
-	protected $nextevent;
+    /**
+     * featstart
+     *
+     * @var DateTime
+     */
+    protected $featstart;
 
-	/**
-	 * Schedule for the course
-	 *
-	 * @var Tx_Lecoop_Domain_Model_Schedule
-	 */
-	protected $scheduleid;
+    /**
+     * featend
+     *
+     * @var DateTime
+     */
+    protected $featend;
 
-	/**
-	 * updates
-	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates>
-	 */
-	protected $updates;
+    /**
+     * Schedule for the course
+     *
+     * @var Tx_Lecoop_Domain_Model_Schedule
+     */
+    protected $scheduleid;
 
-	/**
-	 * tags
-	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag>
-	 */
-	protected $tags;
+    /**
+     * updates
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates>
+     */
+    protected $updates;
 
-	/**
-	 * rating
-	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating>
-	 */
-	protected $rating;
+    /**
+     * tags
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag>
+     */
+    protected $tags;
 
-	/**
-	 * __construct
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		//Do not remove the next line: It would break the functionality
-		$this->initStorageObjects();
-		// init virtual attributes (next event)
-		$this->initVirtualAttributes();
-		
-		// make sure we have a schedule
-		$this->scheduleid = new Tx_Lecoop_Domain_Model_Schedule();
-	}
-	
-	/**
-	 * initializeObject
-	 *
-	 * @return void
-	 */
-	public function initializeObject() {
-		$this->initVirtualAttributes();
-	}
+    /**
+     * rating
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating>
+     */
+    protected $rating;
 
-	/**
-	 * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
-	 *
-	 * @return void
-	 */
-	protected function initStorageObjects() {
-		/**
-		 * Do not modify this method!
-		 * It will be rewritten on each save in the extension builder
-		 * You may modify the constructor of this class instead
-		 */
-		$this->updates = new Tx_Extbase_Persistence_ObjectStorage();
-		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
-		$this->rating = new Tx_Extbase_Persistence_ObjectStorage();
-	}
-	
-	protected function initVirtualAttributes() {
-		// TO-DO: do it!
-		if($this->scheduleid !== NULL)
-			$this->setNextevent($this->scheduleid->getNextevent());
-	}
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct() {
+	//Do not remove the next line: It would break the functionality
+	$this->initStorageObjects();
 
-	/**
-	 * @return Tx_Lecoop_Domain_Model_User
-	 */
-	public function getOwnerid() { return $this->ownerid; }
-	
-	/**
-	 * @param Tx_Lecoop_Domain_Model_User $owner
-	 * @return void
-	 */
-	public function setOwnerid(Tx_Lecoop_Domain_Model_User $owner) { $this->ownerid = $owner; }
+	// make sure we have a schedule
+	$this->scheduleid = new Tx_Lecoop_Domain_Model_Schedule();
+    }
 
+    /**
+     * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
+     *
+     * @return void
+     */
+    protected function initStorageObjects() {
 	/**
-	 * Returns the title
-	 *
-	 * @return string $title
+	 * Do not modify this method!
+	 * It will be rewritten on each save in the extension builder
+	 * You may modify the constructor of this class instead
 	 */
-	public function getTitle() {
-		return $this->title;
-	}
+	$this->updates = new Tx_Extbase_Persistence_ObjectStorage();
+	$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
+	$this->rating = new Tx_Extbase_Persistence_ObjectStorage();
+    }
 
-	/**
-	 * Sets the title
-	 *
-	 * @param string $title
-	 * @return void
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-	}
+    /**
+     * @return Tx_Lecoop_Domain_Model_User
+     */
+    public function getOwnerid() {
+	return $this->ownerid;
+    }
 
-	/**
-	 * Returns the description
-	 *
-	 * @return string $description
-	 */
-	public function getDescription() {
-		return $this->description;
-	}
+    /**
+     * @param Tx_Lecoop_Domain_Model_User $owner
+     * @return void
+     */
+    public function setOwnerid(Tx_Lecoop_Domain_Model_User $owner) {
+	$this->ownerid = $owner;
+    }
 
-	/**
-	 * Sets the description
-	 *
-	 * @param string $description
-	 * @return void
-	 */
-	public function setDescription($description) {
-		$this->description = $description;
-	}
+    /**
+     * Returns the title
+     *
+     * @return string $title
+     */
+    public function getTitle() {
+	return $this->title;
+    }
 
-	/**
-	 * Returns the type
-	 *
-	 * @return integer $type
-	 */
-	public function getType() {
-		return $this->type;
-	}
+    /**
+     * Sets the title
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle($title) {
+	$this->title = $title;
+    }
 
-	/**
-	 * Sets the type
-	 *
-	 * @param integer $type
-	 * @return void
-	 */
-	public function setType($type) {
-		$this->type = $type;
-	}
+    /**
+     * Returns the description
+     *
+     * @return string $description
+     */
+    public function getDescription() {
+	return $this->description;
+    }
 
-	/**
-	 * Returns the featstart
-	 *
-	 * @return DateTime $featstart
-	 */
-	public function getFeatstart() {
-		return $this->featstart;
-	}
+    /**
+     * Sets the description
+     *
+     * @param string $description
+     * @return void
+     */
+    public function setDescription($description) {
+	$this->description = $description;
+    }
 
-	/**
-	 * Sets the featstart
-	 *
-	 * @param DateTime $featstart
-	 * @return void
-	 */
-	public function setFeatstart($featstart) {
-		$this->featstart = $featstart;
-	}
+    /**
+     * Returns the type
+     *
+     * @return integer $type
+     */
+    public function getType() {
+	return $this->type;
+    }
 
-	/**
-	 * Returns the featend
-	 *
-	 * @return DateTime $featend
-	 */
-	public function getFeatend() {
-		return $this->featend;
-	}
+    /**
+     * Sets the type
+     *
+     * @param integer $type
+     * @return void
+     */
+    public function setType($type) {
+	$this->type = $type;
+    }
 
-	/**
-	 * Sets the featend
-	 *
-	 * @param DateTime $featend
-	 * @return void
-	 */
-	public function setFeatend($featend) {
-		$this->featend = $featend;
-	}
+    /**
+     * Returns the featstart
+     *
+     * @return DateTime $featstart
+     */
+    public function getFeatstart() {
+	return $this->featstart;
+    }
 
-	/**
-	 * Returns the nextevent
-	 *
-	 * @return DateTime $nextevent
-	 */
-	public function getNextevent() {
-		return $this->nextevent;
-	}
+    /**
+     * Sets the featstart
+     *
+     * @param DateTime $featstart
+     * @return void
+     */
+    public function setFeatstart($featstart) {
+	$this->featstart = $featstart;
+    }
 
-	/**
-	 * Sets the nextevent
-	 *
-	 * @param DateTime $nextevent
-	 * @return void
-	 */
-	public function setNextevent($nextevent) {
-		$this->nextevent = $nextevent;
-	}
+    /**
+     * Returns the featend
+     *
+     * @return DateTime $featend
+     */
+    public function getFeatend() {
+	return $this->featend;
+    }
 
-	/**
-	 * Returns the scheduleid
-	 *
-	 * @return Tx_Lecoop_Domain_Model_Schedule $scheduleid
-	 */
-	public function getScheduleid() {
-		return $this->scheduleid;
-	}
+    /**
+     * Sets the featend
+     *
+     * @param DateTime $featend
+     * @return void
+     */
+    public function setFeatend($featend) {
+	$this->featend = $featend;
+    }
 
-	/**
-	 * Sets the scheduleid
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Schedule $scheduleid
-	 * @return void
-	 */
-	public function setScheduleid(Tx_Lecoop_Domain_Model_Schedule $scheduleid) {
-		$this->scheduleid = $scheduleid;
-	}
+    /**
+     * Returns the scheduleid
+     *
+     * @return Tx_Lecoop_Domain_Model_Schedule $scheduleid
+     */
+    public function getScheduleid() {
+	return $this->scheduleid;
+    }
 
-	/**
-	 * Adds a Updates
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Updates $update
-	 * @return void
-	 */
-	public function addUpdate(Tx_Lecoop_Domain_Model_Updates $update) {
-		$this->updates->attach($update);
-	}
+    /**
+     * Sets the scheduleid
+     *
+     * @param Tx_Lecoop_Domain_Model_Schedule $scheduleid
+     * @return void
+     */
+    public function setScheduleid(Tx_Lecoop_Domain_Model_Schedule $scheduleid) {
+	$this->scheduleid = $scheduleid;
+    }
 
-	/**
-	 * Removes a Updates
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Updates $updateToRemove The Updates to be removed
-	 * @return void
-	 */
-	public function removeUpdate(Tx_Lecoop_Domain_Model_Updates $updateToRemove) {
-		$this->updates->detach($updateToRemove);
-	}
+    /**
+     * Adds a Updates
+     *
+     * @param Tx_Lecoop_Domain_Model_Updates $update
+     * @return void
+     */
+    public function addUpdate(Tx_Lecoop_Domain_Model_Updates $update) {
+	$this->updates->attach($update);
+    }
 
-	/**
-	 * Returns the updates
-	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates> $updates
-	 */
-	public function getUpdates() {
-		return $this->updates;
-	}
+    /**
+     * Removes a Updates
+     *
+     * @param Tx_Lecoop_Domain_Model_Updates $updateToRemove The Updates to be removed
+     * @return void
+     */
+    public function removeUpdate(Tx_Lecoop_Domain_Model_Updates $updateToRemove) {
+	$this->updates->detach($updateToRemove);
+    }
 
-	/**
-	 * Sets the updates
-	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates> $updates
-	 * @return void
-	 */
-	public function setUpdates(Tx_Extbase_Persistence_ObjectStorage $updates) {
-		$this->updates = $updates;
-	}
+    /**
+     * Returns the updates
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates> $updates
+     */
+    public function getUpdates() {
+	return $this->updates;
+    }
 
-	/**
-	 * Adds a Tag
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Tag $tag
-	 * @return void
-	 */
-	public function addTag(Tx_Lecoop_Domain_Model_Tag $tag) {
-		$this->tags->attach($tag);
-	}
+    /**
+     * Sets the updates
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Updates> $updates
+     * @return void
+     */
+    public function setUpdates(Tx_Extbase_Persistence_ObjectStorage $updates) {
+	$this->updates = $updates;
+    }
 
-	/**
-	 * Removes a Tag
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Tag $tagToRemove The Tag to be removed
-	 * @return void
-	 */
-	public function removeTag(Tx_Lecoop_Domain_Model_Tag $tagToRemove) {
-		$this->tags->detach($tagToRemove);
-	}
+    /**
+     * Adds a Tag
+     *
+     * @param Tx_Lecoop_Domain_Model_Tag $tag
+     * @return void
+     */
+    public function addTag(Tx_Lecoop_Domain_Model_Tag $tag) {
+	$this->tags->attach($tag);
+    }
 
-	/**
-	 * Returns the tags
-	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag> $tags
-	 */
-	public function getTags() {
-		return $this->tags;
-	}
+    /**
+     * Removes a Tag
+     *
+     * @param Tx_Lecoop_Domain_Model_Tag $tagToRemove The Tag to be removed
+     * @return void
+     */
+    public function removeTag(Tx_Lecoop_Domain_Model_Tag $tagToRemove) {
+	$this->tags->detach($tagToRemove);
+    }
 
-	/**
-	 * Sets the tags
-	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag> $tags
-	 * @return void
-	 */
-	public function setTags(Tx_Extbase_Persistence_ObjectStorage $tags) {
-		$this->tags = $tags;
-	}
+    /**
+     * Returns the tags
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag> $tags
+     */
+    public function getTags() {
+	return $this->tags;
+    }
 
-	/**
-	 * Adds a Rating
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Rating $rating
-	 * @return void
-	 */
-	public function addRating(Tx_Lecoop_Domain_Model_Rating $rating) {
-		$this->rating->attach($rating);
-	}
+    /**
+     * Sets the tags
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Tag> $tags
+     * @return void
+     */
+    public function setTags(Tx_Extbase_Persistence_ObjectStorage $tags) {
+	$this->tags = $tags;
+    }
 
-	/**
-	 * Removes a Rating
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Rating $ratingToRemove The Rating to be removed
-	 * @return void
-	 */
-	public function removeRating(Tx_Lecoop_Domain_Model_Rating $ratingToRemove) {
-		$this->rating->detach($ratingToRemove);
-	}
+    /**
+     * Adds a Rating
+     *
+     * @param Tx_Lecoop_Domain_Model_Rating $rating
+     * @return void
+     */
+    public function addRating(Tx_Lecoop_Domain_Model_Rating $rating) {
+	$this->rating->attach($rating);
+    }
 
-	/**
-	 * Returns the rating
-	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating> $rating
-	 */
-	public function getRating() {
-		return $this->rating;
-	}
+    /**
+     * Removes a Rating
+     *
+     * @param Tx_Lecoop_Domain_Model_Rating $ratingToRemove The Rating to be removed
+     * @return void
+     */
+    public function removeRating(Tx_Lecoop_Domain_Model_Rating $ratingToRemove) {
+	$this->rating->detach($ratingToRemove);
+    }
 
-	/**
-	 * Sets the rating
-	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating> $rating
-	 * @return void
-	 */
-	public function setRating(Tx_Extbase_Persistence_ObjectStorage $rating) {
-		$this->rating = $rating;
-	}
+    /**
+     * Returns the rating
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating> $rating
+     */
+    public function getRating() {
+	return $this->rating;
+    }
+
+    /**
+     * Sets the rating
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Rating> $rating
+     * @return void
+     */
+    public function setRating(Tx_Extbase_Persistence_ObjectStorage $rating) {
+	$this->rating = $rating;
+    }
+
+    /**
+     * returns if the course currently is featured
+     *
+     * @return bool
+     */
+    public function isFeatured() {
+	return ($this->featstart < TIME() && $this->featend > TIME());
+    }
 
 }
+
 ?>

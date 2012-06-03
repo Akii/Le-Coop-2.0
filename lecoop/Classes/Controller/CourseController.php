@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -31,215 +31,182 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_Lecoop_Controller_CourseController extends Tx_Extbase_MVC_Controller_ActionController {
+class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_AbstractController {
 
-	/**
-	 * courseRepository
-	 *
-	 * @var Tx_Lecoop_Domain_Repository_CourseRepository
-	 */
-	protected $courseRepository;
+    /**
+     * courseRepository
+     *
+     * @var Tx_Lecoop_Domain_Repository_CourseRepository
+     */
+    protected $courseRepository;
+
+    /**
+     * injectCourseRepository
+     *
+     * @param Tx_Lecoop_Domain_Repository_CourseRepository $courseRepository
+     * @return void
+     */
+    public function injectCourseRepository(Tx_Lecoop_Domain_Repository_CourseRepository $courseRepository) {
+	$this->courseRepository = $courseRepository;
+    }
+
+    public function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
+	parent::initializeView($view);
+
+	$this->view->assign('userGrp', $this->usergroupRepository->findByUid($this->settings['userGrp']));
+	$this->view->assign('tutorGrp', $this->usergroupRepository->findByUid($this->settings['tutorGrp']));
+    }
+
+    /**
+     * action list
+     *
+     * @return void
+     */
+    public function listAction() {
+	$courses = $this->courseRepository->findAll();
+	$this->view->assign('courses', $courses);
+    }
+
+    /**
+     * action show
+     *
+     * @param $course
+     * @return void
+     */
+    public function showAction(Tx_Lecoop_Domain_Model_Course $course) {
+	$this->view->assign('course', $course);
+    }
+
+    /**
+     * action new
+     *
+     * @param $newCourse
+     * @dontvalidate $newCourse
+     * @return void
+     */
+    public function newAction(Tx_Lecoop_Domain_Model_Course $newCourse = NULL) {
+	if ($newCourse === NULL) {
+	    $newCourse = t3lib_div::makeInstance('Tx_Lecoop_Domain_Model_Course');
+	}
+
+	if ($newCourse->getOwnerid() === NULL) {
+	    // get instance of Tx_Lecoop_Domain_Model_User for the owner
+	    $owner = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+
+	    if ($owner == NULL) {
+		$this->flashMessageContainer->add('You discovered a bug, yay! Theoretically you should never see this.. oh well >_> here, have a cookie!');
+		$this->redirect('featured');
+	    }
+
+	    $newCourse->setOwnerid($owner);
+	}
+
+	$this->view->assign('newCourse', $newCourse);
+    }
+
+    /**
+     * action create
+     *
+     * @param $newCourse
+     * @return void
+     */
+    public function createAction(Tx_Lecoop_Domain_Model_Course $newCourse) {
+	// since I don't know if hidden form fields are protected by chash,
+	// we have to check at this point if the owner is still the fe_userid.
+	// At this point we know that an ownerid is set because of @validate NotEmpty
+	if ($newCourse->getOwnerid()->getUid() !== intval($GLOBALS['TSFE']->fe_user->user['uid'])) {
+	    var_dump($newCourse->getOwnerid()->getUid());
+	    var_dump($GLOBALS['TSFE']->fe_user->user['uid']);
+	    // I suspect manipulation, give a warning and redirect to newAction
+	    $this->flashMessageContainer->add('There has been an error validating the owner of the course. In case you manipulated the form you failed, otherwise you found a bug.', 'Owner Validation Failure', t3lib_FlashMessage::ERROR);
+	    $this->redirect('new', null, null, null);
+	}
+
+	$this->courseRepository->add($newCourse);
+	$this->flashMessageContainer->add('Your new Course was created.');
+
+	// we have to persist the object at this point to be able to redirect to edit
+	$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+	$persistenceManager->persistAll();
+
+	$this->redirect('edit', null, null, array('course' => $newCourse));
+    }
+
+    /**
+     * action edit
+     *
+     * @param $course
+     * @param int $activeTab
+     * @return void
+     */
+    public function editAction(Tx_Lecoop_Domain_Model_Course $course, $activeTab = 1) {
+	$this->view->assign('course', $course);
+	$this->view->assign('tab', intval($activeTab));
+    }
+
+    /**
+     * action update
+     *
+     * @param $course
+     * @return void
+     */
+    public function updateAction(Tx_Lecoop_Domain_Model_Course $course) {
+	$this->courseRepository->update($course);
+	$this->flashMessageContainer->add('Your Course was updated.');
+
+	//$this->redirect('list');
+	$this->redirect('edit', null, null, array('course' => $course));
+    }
+
+    /**
+     * action delete
+     *
+     * @param $course
+     * @return void
+     */
+    public function deleteAction(Tx_Lecoop_Domain_Model_Course $course) {
+	$this->courseRepository->remove($course);
+	$this->flashMessageContainer->add('Your Course was removed.');
+	$this->redirect('list');
+    }
+
+    /**
+     * action featured
+     *
+     * @return void
+     */
+    public function featuredAction() {
+	$featured = $this->courseRepository->findFeatured();
+	$this->view->assign('courses', $featured);
+    }
+
+    /**
+     * action search
+     *
+     * @return void
+     */
+    public function searchAction() {
 	
-	/**
-	 * usergroupRepository
-	 *
-	 * @var Tx_Extbase_Domain_Repository_FrontendUserGroupRepository
-	 */
-	protected $usergroupRepository;
+    }
+
+    /**
+     * action upcoming
+     *
+     * @return void
+     */
+    public function upcomingAction() {
 	
-	/**
-	 * userRepository
-	 *
-	 * @var Tx_Lecoop_Domain_Repository_UserRepository
-	 */
-	protected $userRepository;
+    }
 
-	/**
-	 * injectCourseRepository
-	 *
-	 * @param Tx_Lecoop_Domain_Repository_CourseRepository $courseRepository
-	 * @return void
-	 */
-	public function injectCourseRepository(Tx_Lecoop_Domain_Repository_CourseRepository $courseRepository) {
-		$this->courseRepository = $courseRepository;
-	}
+    /**
+     * action usercourses
+     *
+     * @return void
+     */
+    public function usercoursesAction() {
 	
-	/**
-	 * injectUsergroupRepository
-	 *
-	 * @var Tx_Extbase_Domain_Repository_FrontendUserGroupRepository $usergroupRepository
-	 * @return void
-	 */
-	public function injectUsergroupRepository(Tx_Extbase_Domain_Repository_FrontendUserGroupRepository $usergroupRepository) {
-		$this->usergroupRepository = $usergroupRepository;
-	}
-	
-	/**
-	 * injectUserRepository
-	 *
-	 * @var Tx_Lecoop_Domain_Repository_UserRepository $userRepository
-	 * @return void
-	 */
-	public function injectUserRepository(Tx_Lecoop_Domain_Repository_UserRepository $userRepository) {
-		$this->userRepository = $userRepository;
-	}
-
-	public function initializeAction() {
-		parent::initializeAction();
-		
-		$this->injectUsergroupRepository(
-			t3lib_div::makeInstance('Tx_Extbase_Domain_Repository_FrontendUserGroupRepository')
-		);
-		
-		$this->injectUserRepository(
-			t3lib_div::makeInstance('Tx_Lecoop_Domain_Repository_UserRepository')
-		);
-	}
-	
-	public function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
-		parent::initializeView($view);
-		
-		$this->view->assign('userGrp', $this->usergroupRepository->findByUid($this->settings['userGrp']));
-		$this->view->assign('tutorGrp', $this->usergroupRepository->findByUid($this->settings['tutorGrp']));
-	}
-
-	/**
-	 * action list
-	 *
-	 * @return void
-	 */
-	public function listAction() {
-		$courses = $this->courseRepository->findAll();
-		$this->view->assign('courses', $courses);
-	}
-
-	/**
-	 * action show
-	 *
-	 * @param $course
-	 * @return void
-	 */
-	public function showAction(Tx_Lecoop_Domain_Model_Course $course) {
-		$this->view->assign('course', $course);
-	}
-
-	/**
-	 * action new
-	 *
-	 * @param $newCourse
-	 * @dontvalidate $newCourse
-	 * @return void
-	 */
-	public function newAction(Tx_Lecoop_Domain_Model_Course $newCourse = NULL) {
-		if($newCourse === NULL) {
-			$newCourse = t3lib_div::makeInstance('Tx_Lecoop_Domain_Model_Course');
-		}
-		
-		if($newCourse->getOwnerid() === NULL) {
-			// get instance of Tx_Lecoop_Domain_Model_User for the owner
-			$owner = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
-			
-			if($owner == NULL) {
-				$this->flashMessageContainer->add('You discovered a bug, yay! Theoretically you should never see this.. oh well >_> here, have a cookie!');
-				$this->redirect('featured');
-			}
-			
-			$newCourse->setOwnerid($owner);
-		}
-		
-	
-		$this->view->assign('newCourse', $newCourse);
-	}
-
-	/**
-	 * action create
-	 *
-	 * @param $newCourse
-	 * @return void
-	 */
-	public function createAction(Tx_Lecoop_Domain_Model_Course $newCourse) {
-		
-	
-		$this->courseRepository->add($newCourse);
-		$this->flashMessageContainer->add('Your new Course was created.');
-		
-		// we have to persist the object at this point to be able to redirect to edit
-		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
-		$persistenceManager->persistAll();
-		
-		$this->redirect('edit', null, null, array('course' => $newCourse));
-	}
-
-	/**
-	 * action edit
-	 *
-	 * @param $course
-	 * @return void
-	 */
-	public function editAction(Tx_Lecoop_Domain_Model_Course $course) {
-		$this->view->assign('course', $course);
-	}
-
-	/**
-	 * action update
-	 *
-	 * @param $course
-	 * @return void
-	 */
-	public function updateAction(Tx_Lecoop_Domain_Model_Course $course) {
-		$this->courseRepository->update($course);
-		$this->flashMessageContainer->add('Your Course was updated.');
-		$this->redirect('list');
-	}
-
-	/**
-	 * action delete
-	 *
-	 * @param $course
-	 * @return void
-	 */
-	public function deleteAction(Tx_Lecoop_Domain_Model_Course $course) {
-		$this->courseRepository->remove($course);
-		$this->flashMessageContainer->add('Your Course was removed.');
-		$this->redirect('list');
-	}
-
-	/**
-	 * action featured
-	 *
-	 * @return void
-	 */
-	public function featuredAction() {
-		$featured = $this->courseRepository->findFeatured();
-		$this->view->assign('courses', $featured);
-	}
-
-	/**
-	 * action search
-	 *
-	 * @return void
-	 */
-	public function searchAction() {
-
-	}
-
-	/**
-	 * action upcoming
-	 *
-	 * @return void
-	 */
-	public function upcomingAction() {
-
-	}
-
-	/**
-	 * action usercourses
-	 *
-	 * @return void
-	 */
-	public function usercoursesAction() {
-
-	}
+    }
 
 }
+
 ?>

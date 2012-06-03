@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -32,23 +32,52 @@
  *
  */
 class Tx_Lecoop_Domain_Repository_CourseRepository extends Tx_Extbase_Persistence_Repository {
+    /*
+      public function findAll() {
+      $query = $this->createQuery();
 
-	/**
-	 * findFeatured
-	 *
-	 * finds all featured courses
-	 */
-	public function findFeatured() {
-		$query = $this->createQuery();
-		
-		return $query
+      return $query
+      ->matching(
+      $query->greaterThanOrEqual('scheduleid.end', TIME())
+      )
+      ->execute();
+      }
+     */
+
+    /**
+     * findFeatured
+     *
+     * finds all featured courses
+     */
+    public function findFeatured() {
+	$query = $this->createQuery();
+
+	return $query
 			->matching(
 				$query->logicalAnd(
-					$query->greaterThanOrEqual('featstart', TIME()),
-					$query->lessThanOrEqual('featend', TIME())
+					$query->lessThanOrEqual('featstart', TIME()), $query->greaterThanOrEqual('featend', TIME()), $query->greaterThanOrEqual('scheduleid.end', TIME())
 				)
 			)
 			->execute();
-	}
+    }
+
+    /**
+     * findUpcoming
+     *
+     * calculates the next event, sorts the result and returns it
+     */
+    public function findUpcoming() {
+	$query = $this->createQuery();
+
+	return $query
+			->matching(
+				$query->logicalAnd(
+					$query->lessThanOrEqual('scheduleid.start', TIME()), $query->greaterThanOrEqual('scheduleid.end', TIME())
+				)
+			)
+			->execute();
+    }
+
 }
+
 ?>

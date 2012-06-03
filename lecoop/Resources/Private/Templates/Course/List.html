@@ -36,7 +36,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			<td><f:link.action action="show" arguments="{course : course}"> {course.featstart -> f:format.date()}</f:link.action></td>
 			<td><f:link.action action="show" arguments="{course : course}"> {course.featend -> f:format.date()}</f:link.action></td>
 			<td><f:link.action action="show" arguments="{course : course}"> {course.nextevent -> f:format.date()}</f:link.action></td>
-			<td><f:link.action action="edit" arguments="{course : course}">Edit</f:link.action></td>
+			<td><f:link.action action="edit" pageUid="15" controller="Course" arguments="{course : course}">Edit</f:link.action></td>
 			<td><f:link.action action="delete" arguments="{course : course}">Delete</f:link.action></td>
 		</tr>
 	</f:for>

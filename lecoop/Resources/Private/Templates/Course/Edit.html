@@ -13,13 +13,29 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:section name="main">
 <h1>Edit Course</h1>
+<br/>
 
-<f:flashMessages />
+<f:flashMessages renderMode="div" />
 
-<f:render partial="FormErrors" arguments="{object:Course}"/>
+<f:render partial="FormErrors" arguments="{object:course}"/>
 
-<f:form action="update" name="course" object="{course}" >
-<f:render partial="Course/FormFields" arguments="{course:course}" />
-	<f:form.submit value="Save" />
-</f:form>
+
+    <div class="tabbable tabs-left">
+	    <ul class="nav nav-tabs">
+		    <li class="{f:if(condition: '{tab} == 1', then: 'active')}"><a href="#tab1" data-toggle="tab">General</a></li>
+		    <li class="{f:if(condition: '{tab} == 2', then: 'active')}"><a href="#tab2" data-toggle="tab">Schedule</a></li>
+		    <li class="{f:if(condition: '{tab} == 3', then: 'active')}"><a href="#tab3" data-toggle="tab">Exceptions</a></li>
+	    </ul>
+	    <div class="tab-content">
+		    <div class="tab-pane {f:if(condition: '{tab} == 1', then: 'active')}" id="tab1">
+			    <f:render partial="Course/EditGeneral" arguments="{course: '{course}', tutorGrp: '{tutorGrp}'}"/>
+		    </div>
+		    <div class="tab-pane {f:if(condition: '{tab} == 2', then: 'active')}" id="tab2">
+			    <f:render partial="Course/EditSchedule" arguments="{course: '{course}', schedule: '{course.scheduleid}'}"/>
+		    </div>
+		    <div class="tab-pane {f:if(condition: '{tab} == 3', then: 'active')}" id="tab3">
+			    Exceptions
+		    </div>
+	    </div>
+    </div>
 </f:section>
