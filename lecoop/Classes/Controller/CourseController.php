@@ -195,7 +195,9 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function upcomingAction() {
+	$courses = $this->courseRepository->findUpcoming();
 	
+	$this->view->assign('courses', $courses);
     }
 
     /**

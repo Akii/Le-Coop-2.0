@@ -1,3 +1,6 @@
+{namespace fed=Tx_Fed_ViewHelpers}
+{namespace vh=Tx_Lecoop_ViewHelpers}
+
 <f:layout name="DefaultNoFrame" />
 <f:section name="main">
     <ul class="course_link">
@@ -5,5 +8,4 @@
 	    <f:render partial="Course/CourseLinkItem" arguments="{course: '{course}'}" />
 	</f:for>
     </ul>
-    <f:debug>{courses}</f:debug>
 </f:section>
