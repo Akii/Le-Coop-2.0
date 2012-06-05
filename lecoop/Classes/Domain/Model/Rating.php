@@ -45,6 +45,7 @@ class Tx_Lecoop_Domain_Model_Rating extends Tx_Extbase_DomainObject_AbstractEnti
 	 * userid
 	 *
 	 * @var Tx_Lecoop_Domain_Model_User
+	 * @validate NotEmpty
 	 */
 	protected $userid;
 

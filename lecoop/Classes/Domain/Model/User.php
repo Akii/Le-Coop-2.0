@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -33,152 +33,162 @@
  */
 class Tx_Lecoop_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUser {
 
-	/**
-	 * The schedule for the user (timetable)
-	 *
-	 * @var Tx_Lecoop_Domain_Model_Schedule
-	 * @lazy
-	 */
-	protected $scheduleid;
+    /**
+     * The schedule for the user (timetable)
+     *
+     * @var Tx_Lecoop_Domain_Model_Schedule
+     * @lazy
+     */
+    protected $scheduleid;
 
-	/**
-	 * subscriptions
-	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course>
-	 * @lazy
-	 */
-	protected $subscriptions;
+    /**
+     * subscriptions
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course>
+     * @lazy
+     */
+    protected $subscriptions;
 
-	/**
-	 * viewed
-	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed>
-	 * @lazy
-	 */
-	protected $viewed;
+    /**
+     * viewed
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed>
+     * @lazy
+     */
+    protected $viewed;
 
-	/**
-	 * __construct
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		//Do not remove the next line: It would break the functionality
-		$this->initStorageObjects();
-	}
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct() {
+	//Do not remove the next line: It would break the functionality
+	$this->initStorageObjects();
+    }
 
+    /**
+     * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
+     *
+     * @return void
+     */
+    protected function initStorageObjects() {
 	/**
-	 * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
-	 *
-	 * @return void
+	 * Do not modify this method!
+	 * It will be rewritten on each save in the extension builder
+	 * You may modify the constructor of this class instead
 	 */
-	protected function initStorageObjects() {
-		/**
-		 * Do not modify this method!
-		 * It will be rewritten on each save in the extension builder
-		 * You may modify the constructor of this class instead
-		 */
-		$this->subscriptions = new Tx_Extbase_Persistence_ObjectStorage();
-		
-		$this->viewed = new Tx_Extbase_Persistence_ObjectStorage();
-	}
+	$this->subscriptions = new Tx_Extbase_Persistence_ObjectStorage();
 
-	/**
-	 * Returns the scheduleid
-	 *
-	 * @return Tx_Lecoop_Domain_Model_Schedule $scheduleid
-	 */
-	public function getScheduleid() {
-		return $this->scheduleid;
-	}
+	$this->viewed = new Tx_Extbase_Persistence_ObjectStorage();
+    }
 
-	/**
-	 * Sets the scheduleid
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Schedule $scheduleid
-	 * @return void
-	 */
-	public function setScheduleid(Tx_Lecoop_Domain_Model_Schedule $scheduleid) {
-		$this->scheduleid = $scheduleid;
-	}
+    /**
+     * Returns the scheduleid
+     *
+     * @return Tx_Lecoop_Domain_Model_Schedule $scheduleid
+     */
+    public function getScheduleid() {
+	return $this->scheduleid;
+    }
 
-	/**
-	 * Adds a Course
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Course $subscription
-	 * @return void
-	 */
-	public function addSubscription(Tx_Lecoop_Domain_Model_Course $subscription) {
-		$this->subscriptions->attach($subscription);
-	}
+    /**
+     * Sets the scheduleid
+     *
+     * @param Tx_Lecoop_Domain_Model_Schedule $scheduleid
+     * @return void
+     */
+    public function setScheduleid(Tx_Lecoop_Domain_Model_Schedule $scheduleid) {
+	$this->scheduleid = $scheduleid;
+    }
 
-	/**
-	 * Removes a Course
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Course $subscriptionToRemove The Course to be removed
-	 * @return void
-	 */
-	public function removeSubscription(Tx_Lecoop_Domain_Model_Course $subscriptionToRemove) {
-		$this->subscriptions->detach($subscriptionToRemove);
-	}
+    /**
+     * Adds a Course
+     *
+     * @param Tx_Lecoop_Domain_Model_Course $subscription
+     * @return void
+     */
+    public function addSubscription(Tx_Lecoop_Domain_Model_Course $subscription) {
+	$this->subscriptions->attach($subscription);
+    }
 
-	/**
-	 * Returns the subscriptions
-	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course> $subscriptions
-	 */
-	public function getSubscriptions() {
-		return $this->subscriptions;
-	}
+    /**
+     * Removes a Course
+     *
+     * @param Tx_Lecoop_Domain_Model_Course $subscriptionToRemove The Course to be removed
+     * @return void
+     */
+    public function removeSubscription(Tx_Lecoop_Domain_Model_Course $subscriptionToRemove) {
+	$this->subscriptions->detach($subscriptionToRemove);
+    }
 
-	/**
-	 * Sets the subscriptions
-	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course> $subscriptions
-	 * @return void
-	 */
-	public function setSubscriptions(Tx_Extbase_Persistence_ObjectStorage $subscriptions) {
-		$this->subscriptions = $subscriptions;
-	}
+    /**
+     * Returns the subscriptions
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course> $subscriptions
+     */
+    public function getSubscriptions() {
+	return $this->subscriptions;
+    }
 
-	/**
-	 * Adds a Viewed
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Viewed $viewed
-	 * @return void
-	 */
-	public function addViewed(Tx_Lecoop_Domain_Model_Viewed $viewed) {
-		$this->viewed->attach($viewed);
-	}
+    /**
+     * Sets the subscriptions
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Course> $subscriptions
+     * @return void
+     */
+    public function setSubscriptions(Tx_Extbase_Persistence_ObjectStorage $subscriptions) {
+	$this->subscriptions = $subscriptions;
+    }
 
-	/**
-	 * Removes a Viewed
-	 *
-	 * @param Tx_Lecoop_Domain_Model_Viewed $viewedToRemove The Viewed to be removed
-	 * @return void
-	 */
-	public function removeViewed(Tx_Lecoop_Domain_Model_Viewed $viewedToRemove) {
-		$this->viewed->detach($viewedToRemove);
-	}
+    /**
+     * Adds a Viewed
+     *
+     * @param Tx_Lecoop_Domain_Model_Viewed $viewed
+     * @return void
+     */
+    public function addViewed(Tx_Lecoop_Domain_Model_Viewed $viewed) {
+	$this->viewed->attach($viewed);
+    }
 
-	/**
-	 * Returns the viewed
-	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed> $viewed
-	 */
-	public function getViewed() {
-		return $this->viewed;
-	}
+    /**
+     * Removes a Viewed
+     *
+     * @param Tx_Lecoop_Domain_Model_Viewed $viewedToRemove The Viewed to be removed
+     * @return void
+     */
+    public function removeViewed(Tx_Lecoop_Domain_Model_Viewed $viewedToRemove) {
+	$this->viewed->detach($viewedToRemove);
+    }
 
-	/**
-	 * Sets the viewed
-	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed> $viewed
-	 * @return void
-	 */
-	public function setViewed(Tx_Extbase_Persistence_ObjectStorage $viewed) {
-		$this->viewed = $viewed;
-	}
+    /**
+     * Returns the viewed
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed> $viewed
+     */
+    public function getViewed() {
+	return $this->viewed;
+    }
+
+    /**
+     * Sets the viewed
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Viewed> $viewed
+     * @return void
+     */
+    public function setViewed(Tx_Extbase_Persistence_ObjectStorage $viewed) {
+	$this->viewed = $viewed;
+    }
+
+    /**
+     * return the username or name
+     * 
+     * @return string 
+     */
+    public function getName() {
+	return ($this->name != "") ? $this->name : $this->username;
+    }
 
 }
+
 ?>

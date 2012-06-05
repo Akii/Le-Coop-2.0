@@ -88,7 +88,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	$permissions = $this->getPermissions($newCourse);
 	if($permissions['login'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 	
 	if ($newCourse === NULL) {
@@ -120,7 +120,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	$permissions = $this->getPermissions($newCourse);
 	if($permissions['create'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 	// since I don't know if hidden form fields are protected by chash,
 	// we have to check at this point if the owner is still the fe_userid.
@@ -156,7 +156,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	$permissions = $this->getPermissions($course);
 	if($permissions['update'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 	
 	$this->view->assign('course', $course);
@@ -193,7 +193,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	$permissions = $this->getPermissions($course);
 	if($permissions['delete'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 	
 	$this->courseRepository->remove($course);
@@ -201,6 +201,24 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	$this->redirect('ucp', 'User', 'Ucp', null, '13');
     }
 
+    /**
+     * action rate
+     * 
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @param Tx_Lecoop_Domain_Model_Rating $rating
+     * @todo Move validation up to the abstract class
+     * @return void 
+     */
+    public function rateAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Rating $rating) {
+	if(!$course->getCanRate() || $GLOBALS['TSFE']->fe_user === false || $rating->getUserid()->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('show', null, null, array('course' => $course));
+	}
+	
+	$course->addRating($rating);
+	$this->redirect('show', null, null, array('course' => $course));
+    }
+    
     /**
      * action featured
      *

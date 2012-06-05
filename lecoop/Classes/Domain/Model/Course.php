@@ -111,6 +111,13 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
     protected $rating;
 
     /**
+     * subscriptions
+     *
+     * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_User>
+     */
+    protected $subscriptions;
+
+    /**
      * __construct
      *
      * @return void
@@ -137,6 +144,7 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
 	$this->updates = new Tx_Extbase_Persistence_ObjectStorage();
 	$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
 	$this->rating = new Tx_Extbase_Persistence_ObjectStorage();
+	$this->subscriptions = new Tx_Extbase_Persistence_ObjectStorage();
     }
 
     /**
@@ -386,6 +394,45 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
     }
 
     /**
+     * Adds an User
+     *
+     * @param Tx_Lecoop_Domain_Model_User $subscription
+     * @return void
+     */
+    public function addSubscription(Tx_Lecoop_Domain_Model_User $subscription) {
+	$this->subscriptions->attach($subscription);
+    }
+
+    /**
+     * Removes an User
+     *
+     * @param Tx_Lecoop_Domain_Model_User $subscriptionToRemove The User to be removed
+     * @return void
+     */
+    public function removeSubscription(Tx_Lecoop_Domain_Model_User $subscriptionToRemove) {
+	$this->subscriptions->detach($subscriptionToRemove);
+    }
+
+    /**
+     * Returns the subscriptions
+     *
+     * @return Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_User> $subscriptions
+     */
+    public function getSubscriptions() {
+	return $this->subscriptions;
+    }
+
+    /**
+     * Sets the subscriptions
+     *
+     * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_User> $subscriptions
+     * @return void
+     */
+    public function setSubscriptions(Tx_Extbase_Persistence_ObjectStorage $subscriptions) {
+	$this->subscriptions = $subscriptions;
+    }
+
+    /**
      * returns if the course currently is featured
      *
      * @return bool
@@ -393,19 +440,68 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
     public function isFeatured() {
 	return ($this->featstart < TIME() && $this->featend > TIME());
     }
-    
+
     /**
      * Returns if the course can be edited by the user
      * 
      * @return boolean
      */
     public function getCanEdit() {
-	if($GLOBALS['TSFE']->fe_user->user !== false) {
+	if ($GLOBALS['TSFE']->fe_user->user !== false) {
 	    return ($this->getOwnerid()->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']);
 	}
 	return false;
     }
-
+    
+    /**
+     * Returns if a user has subscribed to the course
+     * 
+     * @todo This has to be rewritten if this extension is used on production sites
+     * @return boolean 
+     */
+    public function getCanSubscribe() {
+	if($this->getCanEdit()) return false;
+	if($GLOBALS['TSFE']->fe_user->user == false) return false;
+	
+	foreach($this->subscriptions as $subscriber)
+		if($subscriber->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']) return false;
+	
+	return true;
+    }
+    
+    /**
+     * Returns whether a user has rated the course already
+     * 
+     * @return boolean 
+     */
+    public function getCanRate() {
+	if($this->getCanEdit() || $this->getCanSubscribe()) return false;
+	if($GLOBALS['TSFE']->fe_user->user == false) return false;
+	
+	foreach($this->rating as $rating)
+		if($rating->getUserid()->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']) return false;
+	
+	return true;
+    }
+    
+    /**
+     * Returns the avg rating 
+     * 
+     * @return int
+     */
+    public function getAvgRating() {
+	$ratings = count($this->rating);
+	
+	if($ratings == 0)
+	    return -1;
+	
+	$i = 0;
+	foreach($this->rating as $rating) {
+	    $i += $rating->getRating();
+	}
+	
+	return ceil($i / $ratings);
+    }
 }
 
 ?>

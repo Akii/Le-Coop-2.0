@@ -17,6 +17,7 @@ CREATE TABLE tx_lecoop_domain_model_course (
 	updates int(11) unsigned DEFAULT '0' NOT NULL,
 	tags int(11) unsigned DEFAULT '0' NOT NULL,
 	rating int(11) unsigned DEFAULT '0' NOT NULL,
+	subscriptions int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

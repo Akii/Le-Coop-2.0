@@ -81,6 +81,15 @@ abstract class Tx_Lecoop_Controller_AbstractController extends Tx_Extbase_MVC_Co
         );
     }
 
+    public function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
+	parent::initializeView($view);
+	
+	if($GLOBALS['TSFE']->fe_user->user !== FALSE) {
+	    $user = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+	    $this->view->assign('fe_user', $user);
+	}
+    }
+    
     protected function getErrorFlashMessage() {
 	switch ($this->actionMethodName) {
 	    case "createAction":

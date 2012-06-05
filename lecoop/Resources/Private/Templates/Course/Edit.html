@@ -26,7 +26,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	    <li class="{f:if(condition: '{tab} == 2', then: 'active')}"><a href="#tab2" data-toggle="tab">Schedule</a></li>
 	    <li class="{f:if(condition: '{tab} == 3', then: 'active')}"><a href="#tab3" data-toggle="tab">Exceptions</a></li>
 	    <li><br/></li>
-	    <li><f:link.action action="featured">Exit</f:link.action></li>
+	    <li><f:link.action action="show" arguments="{course: '{course}'}">Exit</f:link.action></li>
 	</ul>
 	<div class="tab-content">
 	    <div class="tab-pane {f:if(condition: '{tab} == 1', then: 'active')}" id="tab1">

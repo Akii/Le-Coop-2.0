@@ -1,11 +1,82 @@
+{namespace vh=Tx_Lecoop_ViewHelpers}
 <f:layout name="Course" />
 <f:section name="main">
 
-	<f:flashMessages />
-	<div class="row">
-	    <div class="span3 offset11">test2</div>
+    <f:flashMessages />
+    <div class="row">
+	<div class="span10">
+
+	    <div class="btn-group tags">
+		<button class="btn btn-toolbar btn-primary"><i class="icon-tags icon-white"></i> Tags:</button>
+		<f:for each="{0: 'eins', 1: 'zwei', 2: 'drei', 3: 'vier', 4: 'fünf', 5: 'sechs', 6: 'sieben', 7: 'acht'}" as="tag">
+		    <button class="btn btn-toolbar">{tag}</button>
+		</f:for>
+	    </div>
 	</div>
-	<div class="well span4">test</div>
-	<div class="span8">test2</div>
-	
+	<div class="span3 offset1">
+	    <div class="btn-group pull-right">
+		<f:security.ifAuthenticated>
+		    <f:then>
+			<f:if condition="{course.canSubscribe}">
+			    <f:link.action action="subscribe" arguments="{course: '{course}'}" class="btn btn-primary">Subscribe!</f:link.action>
+			</f:if>
+		    </f:then>
+		    <f:else>
+			<f:link.page pageUid="12" class="btn btn-primary">Login to subscribe!</f:link.page>
+		    </f:else>
+		</f:security.ifAuthenticated>
+		<button class="btn btn-primary" data-toggle="dropdown"><i class="icon-user icon-white"></i> <f:count subject="{course.subscriptions}" /></button>
+		<f:if condition="{f:count(subject: '{course.subscriptions}')} > 0">
+		    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+		    <ul class="dropdown-menu">
+			<f:for each="{course.subscriptions}" as="subscriber">
+			    <li>
+			    <f:link.page pageUid="13">
+				<f:if condition="{subscriber.name}">
+				    <f:then>{subscriber.name}</f:then>
+				    <f:else>{subscriber.username}</f:else>
+				</f:if>
+			    </f:link.page>
+			    </li>
+			</f:for>
+		    </ul>
+		</f:if>
+	    </div>
+	</div>
+    </div>
+    <div class="row spanpadding">
+	<div class="well span4">
+	    <div class="row">
+		<p><span class="span1 label label-info">Creator:</span>&nbsp;<span> {course.ownerid.name}</span></p>
+		<p>
+		    <span class="span1 label">Rating:</span>&nbsp;
+		<vh:rating rating="{course.avgRating}"/>
+		</p>
+		<f:if condition="{course.canRate}">
+		    <span class="span2">
+			<f:form class="form-inline span3" controller="Course" action="rate" name="rating" object="{rating}">
+			    <f:form.select class="input-small" property="rating" options="{1: '1 Star', 2: '2 Stars', 3: '3 Stars', 4: '4 Stars', 5: '5 Stars'}" />
+			    <f:form.hidden property="userid" value="{fe_user}" />
+			    <f:form.hidden name="course" value="{course}" />
+			    <f:form.submit class="btn btn-success" value="Rate!"/>
+			</f:form>
+		    </span>
+		</f:if>
+	    </div>
+	</div>
+	<div class="span8">
+	    <h2>{course.title}</h2>
+	    <f:format.html>{course.description}</f:format.html>
+	</div>
+    </div>
+    <div class="row"><div class="span14"><hr/></div></div>
+    <div class="row spanpadding">
+	<div class="span13">
+	    <h3>Schedule</h3>
+	</div>
+    </div>
+    <div class="row">
+	<div class="span7">sdf</div>
+	<div class="span7">sf</div>
+    </div>
 </f:section>

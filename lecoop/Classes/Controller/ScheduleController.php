@@ -61,7 +61,7 @@ class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_Abstr
 	$permissions = $this->getPermissions($course);
 	if ($permissions['update'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 
 	$this->scheduleRepository->update($schedule);
@@ -123,7 +123,7 @@ class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_Abstr
 	$permissions = $this->getPermissions($course);
 	if ($permissions['update'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
-	    $this->redirect('featured');
+	    $this->redirect(null, null, null, null, '24');
 	}
 
 	$this->view->assign('event', $event);
