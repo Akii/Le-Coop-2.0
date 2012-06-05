@@ -1,0 +1,40 @@
+{namespace fed=Tx_Fed_ViewHelpers}
+<div class="control-group">
+    <label class="control-label" for="start">
+	<f:translate key="tx_lecoop_domain_model_event.start" />*
+    </label>
+    <div class="controls">
+	<f:form.textfield property="start" class="datetimepicker" value="{event.start->f:format.date(format: 'm/d/y H:i')}" />
+	<p></p>
+    </div>
+    <label class="control-label" for="end">
+	<f:translate key="tx_lecoop_domain_model_event.end" />*
+    </label>
+    <div class="controls">
+	<f:form.textfield property="end" class="datetimepicker" value="{event.end->f:format.date(format: 'm/d/y H:i')}" />
+	<p></p>
+    </div>
+    <label class="control-label" for="length">
+	<f:translate key="tx_lecoop_domain_model_event.length" />*
+    </label>
+    <div class="controls">
+	<f:form.textfield property="length" class="timepicker" value="{event.length->f:format.date(format: 'H:i')}" />
+	<p></p>
+    </div>
+    <label class="control-label" for="steplength">
+	<f:translate key="tx_lecoop_domain_model_event.steplength" />*
+    </label>
+    <div class="controls">
+	<f:form.select class="span3" property="steplength" options="{0: 'None', 1: 'Every Day', 2: 'Every 2 Days', 7: 'Weekly', 14: 'Every two weeks'}" value="{event.steplength}" />
+	<p></p>
+    </div>
+    <hr/>
+    <label class="control-label" for="description">
+	<f:translate key="tx_lecoop_domain_model_event.description" />
+    </label>
+    <div class="controls">
+	<f:form.textarea property="description" class="tinymce" cols="20" rows="10" />
+	<p></p>
+    </div>
+
+</div>

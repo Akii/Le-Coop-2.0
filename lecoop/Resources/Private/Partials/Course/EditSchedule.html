@@ -43,31 +43,34 @@
 	    <f:for each="{course.scheduleid.events}" as="event" iteration="it">
 		<tr>
 		    <td><fed:math expression="{it.index} + 1" /></td>
-		<td>{event.start->f:format.date(format: 'm/d/y H:i')}</td>
-		<td>{event.end->f:format.date(format: 'm/d/y H:i')}</td>
-		<td>{event.length->f:format.date(format: 'H:i')}</td>
-		<td>
-		<f:if condition="{event.steplength} > 0">
-		    <f:then>{event.steplength} {f:if(condition: '{event.steplength} == 1', then: 'Day', else: 'Days')}</f:then>
-		    <f:else>none</f:else>
-		</f:if>
+		    <td>{event.start->f:format.date(format: 'm/d/y H:i')}</td>
+		    <td>{event.end->f:format.date(format: 'm/d/y H:i')}</td>
+		    <td>{event.length->f:format.date(format: 'H:i')}</td>
+		    <td>
+		    <f:if condition="{event.steplength} > 0">
+			<f:then>{event.steplength} {f:if(condition: '{event.steplength} == 1', then: 'Day', else: 'Days')}</f:then>
+			<f:else>none</f:else>
+		    </f:if>
 
-		</td>
-		<td>
+		    </td>
+		    <td>
 		    <f:if condition="{event.nextEvent}">
 			<f:then>
 			    <f:format.date format="m/d/y H:i">{event.nextEvent}</f:format.date>
 			</f:then>
 			<f:else>n/a</f:else>
 		    </f:if>
-		</td>
-		<td>{event.calcEvents} ({event.calcRemEvents})</td>
-		<td>…</td>
+		    </td>
+		    <td>{event.calcEvents} ({event.calcRemEvents})</td>
+		    <td>
+			<f:link.action controller="Schedule" action="editEvent" arguments="{course: '{course}', event: '{event}'}">Edit</f:link.action>
+			<f:link.action controller="Schedule" action="deleteEvent" arguments="{course: '{course}', event: '{event}'}">Delete</f:link.action>
+		    </td>
 		</tr>
 	    </f:for>
 
 	    <tr>
-		<td colspan="8"><f:link.action controller="Schedule" action="newEvent" arguments="{event: '', course: '{course}'}" class="btn btn-primary pull-right">Add new Event</f:link.action></td>
+		<td colspan="8"><f:link.action controller="Schedule" action="newEvent" arguments="{event: '', course: '{course}'}" class="btn btn-primary pull-right">Add Event</f:link.action></td>
 	    </tr>
 
 	    </tbody>

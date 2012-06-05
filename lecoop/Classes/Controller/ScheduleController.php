@@ -58,6 +58,12 @@ class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_Abstr
      * @return void
      */
     public function updateAction(Tx_Lecoop_Domain_Model_Schedule $schedule, Tx_Lecoop_Domain_Model_Course $course) {
+	$permissions = $this->getPermissions($course);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
+
 	$this->scheduleRepository->update($schedule);
 	$this->flashMessageContainer->add('Your Schedule was updated.');
 	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
@@ -73,11 +79,11 @@ class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_Abstr
      */
     public function newEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event = NULL) {
 	$permissions = $this->getPermissions($course);
-	if($permissions['update'] !== true) {
-	    $this->flashMessages->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('show', 'Course', NULL, array('course' => $course));
 	}
-	
+
 	$this->view->assign('event', $event);
 	$this->view->assign('course', $course);
     }
@@ -89,20 +95,83 @@ class Tx_Lecoop_Controller_ScheduleController extends Tx_Lecoop_Controller_Abstr
      * @param Tx_Lecoop_Domain_Model_Course $course
      * @return void
      */
-    public function createEventAction(Tx_Lecoop_Domain_Model_Event $event, Tx_Lecoop_Domain_Model_Course $course) {
+    public function createEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event) {
 	$permissions = $this->getPermissions($course);
-	if($permissions['update'] !== true) {
-	    $this->flashMessages->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('show', 'Course', NULL, array('course' => $course));
 	}
-	
+
 	$schedule = $course->getScheduleid();
-	
+
 	$schedule->addEvent($event);
 	$this->scheduleRepository->update($schedule);
-	
+
 	$this->flashMessageContainer->add('Your new Event was created.');
+
+	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
+    }
+
+    /**
+     * action editEvent
+     *
+     * @param $course
+     * @dontvalidate $event
+     * @return void
+     */
+    public function editEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event) {
+	$permissions = $this->getPermissions($course);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
+
+	$this->view->assign('event', $event);
+	$this->view->assign('course', $course);
+    }
+
+    /**
+     * action updateEvent
+     *
+     * @param $course
+     * @param $event
+     * @return void
+     */
+    public function updateEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event) {
+	$permissions = $this->getPermissions($course);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('edit', 'Course', null, array('course' => $course));
+	}
 	
+	// dirty way to set event.end to null
+	$arguments = $this->request->getArguments();
+	if($arguments['event']['end'] == "")
+	    $event->setEnd(NULL);
+	
+	$course->getScheduleid()->addEvent($event);
+	
+	$this->flashMessageContainer->add('Your Event was updated.');
+	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
+    }
+
+    /**
+     * action deleteEvent
+     * 
+     * @param $course
+     * @param $event
+     * @return void 
+     */
+    public function deleteEventAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Event $event) {
+	$permissions = $this->getPermissions($course);
+	if ($permissions['delete'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('edit', 'Course', null, array('course' => $course));
+	}
+	
+	$schedule = $course->getScheduleid()->removeEvent($event);
+	
+	$this->flashMessageContainer->add('Your Event was removed.');
 	$this->redirect('edit', 'Course', NULL, array('course' => $course, 'activeTab' => '2'));
     }
 

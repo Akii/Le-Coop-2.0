@@ -17,15 +17,15 @@
 	</ul>
 	<div class="tab-content">
 	    <div class="tab-pane active" id="tab2">
-		<f:form class="form-horizontal" action="createEvent" name="event" object="{event}">
+		<f:form class="form-horizontal" action="updateEvent" name="event" object="{event}">
 		    <fieldset>
-			<legend>Create new Event</legend>
-			<f:render partial="Schedule/EventFormFields" arguments="{course: '{course}', event: '{event}'}"/>
+			<legend>Edit Event</legend>
+			    <f:render partial="Schedule/EventFormFields" arguments="{course: '{course}', event: '{event}'}"/>
 		    </fieldset>
 
 		    <div class="form-actions">
 			<f:form.hidden name="course" value="{course}" />
-			<f:form.submit class="btn btn-primary" value="Create Event" />
+			<f:form.submit class="btn btn-primary" value="Update Event" />
 			<f:link.action class="btn" controller="Course" action="edit" arguments="{course: '{course}', activeTab: 2}">Cancel</f:link.action>
 		    </div>
 		</f:form>

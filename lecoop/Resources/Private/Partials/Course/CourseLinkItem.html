@@ -1,6 +1,6 @@
-<li>
+<li onClick="window.location.href='{f:uri.action(action: 'show', controller: 'Course', pageUid: '15', arguments: '{course: course}')}'">
     <span class="month"><f:format.date format="M">{course.scheduleid.nextEvent}</f:format.date></span>
-    <span class="day"><i class="number"><f:format.date format="d">{course.scheduleid.nextEvent}</f:format.date></i></span>
+    <span class="day"><i class="number"><f:format.date format="j">{course.scheduleid.nextEvent}</f:format.date></i></span>
     <span class="content">
 	<h3>{course.title}</h3>
 	<small>BWL, WIF 2, Tutorial(todo)</small>

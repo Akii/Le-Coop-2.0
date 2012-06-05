@@ -85,6 +85,12 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function newAction(Tx_Lecoop_Domain_Model_Course $newCourse = NULL) {
+	$permissions = $this->getPermissions($newCourse);
+	if($permissions['login'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
+	
 	if ($newCourse === NULL) {
 	    $newCourse = t3lib_div::makeInstance('Tx_Lecoop_Domain_Model_Course');
 	}
@@ -111,16 +117,21 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function createAction(Tx_Lecoop_Domain_Model_Course $newCourse) {
+	$permissions = $this->getPermissions($newCourse);
+	if($permissions['create'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
 	// since I don't know if hidden form fields are protected by chash,
 	// we have to check at this point if the owner is still the fe_userid.
 	// At this point we know that an ownerid is set because of @validate NotEmpty
-	if ($newCourse->getOwnerid()->getUid() !== intval($GLOBALS['TSFE']->fe_user->user['uid'])) {
-	    var_dump($newCourse->getOwnerid()->getUid());
-	    var_dump($GLOBALS['TSFE']->fe_user->user['uid']);
-	    // I suspect manipulation, give a warning and redirect to newAction
-	    $this->flashMessageContainer->add('There has been an error validating the owner of the course. In case you manipulated the form you failed, otherwise you found a bug.', 'Owner Validation Failure', t3lib_FlashMessage::ERROR);
-	    $this->redirect('new', null, null, null);
-	}
+//	if ($newCourse->getOwnerid()->getUid() !== intval($GLOBALS['TSFE']->fe_user->user['uid'])) {
+//	    var_dump($newCourse->getOwnerid()->getUid());
+//	    var_dump($GLOBALS['TSFE']->fe_user->user['uid']);
+//	    // I suspect manipulation, give a warning and redirect to newAction
+//	    $this->flashMessageContainer->add('There has been an error validating the owner of the course. In case you manipulated the form you failed, otherwise you found a bug.', 'Owner Validation Failure', t3lib_FlashMessage::ERROR);
+//	    $this->redirect('new', null, null, null);
+//	}
 
 	$this->courseRepository->add($newCourse);
 	$this->flashMessageContainer->add('Your new Course was created.');
@@ -137,9 +148,16 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      *
      * @param $course
      * @param int $activeTab
+     * @dontvalidate $course
      * @return void
      */
     public function editAction(Tx_Lecoop_Domain_Model_Course $course, $activeTab = 1) {
+	$permissions = $this->getPermissions($course);
+	if($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
+	
 	$this->view->assign('course', $course);
 	$this->view->assign('tab', intval($activeTab));
     }
@@ -151,6 +169,12 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function updateAction(Tx_Lecoop_Domain_Model_Course $course) {
+	$permissions = $this->getPermissions($course);
+	if($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('edit', null, null, array('course' => $course));
+	}
+	
 	$this->courseRepository->update($course);
 	$this->flashMessageContainer->add('Your Course was updated.');
 
@@ -165,6 +189,12 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function deleteAction(Tx_Lecoop_Domain_Model_Course $course) {
+	$permissions = $this->getPermissions($course);
+	if($permissions['delete'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('featured');
+	}
+	
 	$this->courseRepository->remove($course);
 	$this->flashMessageContainer->add('Your Course was removed.');
 	$this->redirect('list');

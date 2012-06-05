@@ -8,13 +8,13 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	'Course',
 	array(
 		'Course' => 'featured, new, create, edit, update,  show, search',
-		'Schedule' => 'update, newEvent, createEvent'
+		'Schedule' => 'update, newEvent, createEvent, editEvent, updateEvent, deleteEvent'
 	),
 	// non-cacheable actions
         // @todo remove featured from cached action list
 	array(
 		'Course' => 'new, create, edit, update, search, featured',
-		'Schedule' => 'update, newEvent, createEvent'
+		'Schedule' => 'update, newEvent, createEvent, editEvent, updateEvent, deleteEvent'
 	)
 );
 

@@ -85,6 +85,8 @@ abstract class Tx_Lecoop_Controller_AbstractController extends Tx_Extbase_MVC_Co
 	switch ($this->actionMethodName) {
 	    case "createAction":
 	    case "createEventAction";
+	    case "updateAction";
+	    case "updateEventAction";
 		return 'Validating user input failed. Please make sure to fill in all required forms and try again.';
 		break;
 	    default:
@@ -98,13 +100,17 @@ abstract class Tx_Lecoop_Controller_AbstractController extends Tx_Extbase_MVC_Co
      * @param Tx_Lecoop_Domain_Model_Course $course
      * @return mixed array $permissions
      */
-    protected function getPermissions(Tx_Lecoop_Domain_Model_Course $course) {
+    protected function getPermissions(Tx_Lecoop_Domain_Model_Course $course = NULL) {
         $permissions = array(
             'read'      => true,    // we never restrict read access as of now
 	    'create'	=> false,
             'update'    => false,
             'delete'    => false,
+	    'login'	=> ($GLOBALS['TSFE']->fe_user->user !== FALSE),
         );
+	
+	if($course === NULL)
+	    return $permissions;
 	
 	$user = $course->getOwnerid();
 	
@@ -119,16 +125,14 @@ abstract class Tx_Lecoop_Controller_AbstractController extends Tx_Extbase_MVC_Co
 		
 		// if the user attempts to create a Tx_Lecoop_Domain_Model_Course::COURSE
 		// we have to check if he is in the required group.
-		if($course->getType() === Tx_Lecoop_Domain_Model_Course::COURSE) {
+		if($course->getType() == Tx_Lecoop_Domain_Model_Course::COURSE) {
 		    if(array_search($this->settings['tutorGrp'], $grps) !== false) {
-			$permissions['create']	= true;
-			$permissions['update']	= true;
+			$permissions['create'] = true;
+			$permissions['update'] = true;
 		    }
-		} elseif($course->getType() === Tx_Lecoop_Domain_Model_Course::LGRP) {
-		    if(array_search($this->settings['userGrp'], $grps) !== false) {
-			$permissions['create']	= true;
-			$permissions['update']	= true;
-		    }
+		} elseif($course->getType() == Tx_Lecoop_Domain_Model_Course::LGRP) {
+		    $permissions['create'] = true;
+		    $permissions['update'] = true;
 		}
 	    }
 	}
