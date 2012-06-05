@@ -36,6 +36,7 @@
 		    <th>Repetition</th>
 		    <th>Next Event</th>
 		    <th># of Events</th>
+		    <th><i class="icon-comment"></i></th>
 		    <th>Functions</th>
 		</tr>
 	    </thead>
@@ -63,17 +64,16 @@
 		    </td>
 		    <td>{event.calcEvents} ({event.calcRemEvents})</td>
 		    <td>
+			<i class="tipsy icon-comment" style="position: absolute; z-index: 0;" title="{event.description}"></i>
+		    </td>
+		    <td>
 			<f:link.action controller="Schedule" action="editEvent" arguments="{course: '{course}', event: '{event}'}">Edit</f:link.action>
 			<f:link.action controller="Schedule" action="deleteEvent" arguments="{course: '{course}', event: '{event}'}">Delete</f:link.action>
 		    </td>
 		</tr>
 	    </f:for>
-
-	    <tr>
-		<td colspan="8"><f:link.action controller="Schedule" action="newEvent" arguments="{event: '', course: '{course}'}" class="btn btn-primary pull-right">Add Event</f:link.action></td>
-	    </tr>
-
 	    </tbody>
 	</table>
+	<f:link.action controller="Schedule" action="newEvent" arguments="{event: '', course: '{course}'}" class="btn btn-primary">Add Event</f:link.action>
     </fieldset>
 </f:form>

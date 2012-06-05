@@ -4,5 +4,8 @@
     <span class="content">
 	<h3>{course.title}</h3>
 	<small>BWL, WIF 2, Tutorial(todo)</small>
+	<f:if condition="{course.canEdit}">
+	    <f:link.action class="editAction" action="edit" controller="Course" pageUid="15" arguments="{course: '{course}'}" title="Edit"><i class="icon-edit"></i></f:link.action>
+	</f:if>
     </span>
 </li>

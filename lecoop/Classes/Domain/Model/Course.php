@@ -393,6 +393,18 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
     public function isFeatured() {
 	return ($this->featstart < TIME() && $this->featend > TIME());
     }
+    
+    /**
+     * Returns if the course can be edited by the user
+     * 
+     * @return boolean
+     */
+    public function getCanEdit() {
+	if($GLOBALS['TSFE']->fe_user->user !== false) {
+	    return ($this->getOwnerid()->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']);
+	}
+	return false;
+    }
 
 }
 

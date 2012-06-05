@@ -1,21 +1,11 @@
-<f:layout name="Default" />
-
-This Template is responsible for displaying a single view for a domain object
-
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        Show.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
+<f:layout name="Course" />
 <f:section name="main">
-<h1>Single View for Course</h1>
 
-<f:flashMessages />
-<f:render partial="Course/Properties" arguments="{course:course}" />
-<f:link.action action="list">Back to list</f:link.action><br />
-<f:link.action action="new">New Course</f:link.action>
+	<f:flashMessages />
+	<div class="row">
+	    <div class="span3 offset11">test2</div>
+	</div>
+	<div class="well span4">test</div>
+	<div class="span8">test2</div>
+	
 </f:section>

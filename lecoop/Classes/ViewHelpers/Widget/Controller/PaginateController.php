@@ -33,7 +33,7 @@
  * @author     Benjamin Schulte <benjamin.schulte@diemedialen.de>
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_Ccore_ViewHelpers_Widget_Controller_PaginateController extends Tx_Fluid_Core_Widget_AbstractWidgetController {
+class Tx_Lecoop_ViewHelpers_Widget_Controller_PaginateController extends Tx_Fluid_Core_Widget_AbstractWidgetController {
 	/**
 	 * @var array
 	 */

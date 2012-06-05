@@ -149,6 +149,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @param $course
      * @param int $activeTab
      * @dontvalidate $course
+     * @dontvalidate $activeTab
      * @return void
      */
     public function editAction(Tx_Lecoop_Domain_Model_Course $course, $activeTab = 1) {
@@ -197,7 +198,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	
 	$this->courseRepository->remove($course);
 	$this->flashMessageContainer->add('Your Course was removed.');
-	$this->redirect('list');
+	$this->redirect('ucp', 'User', 'Ucp', null, '13');
     }
 
     /**
