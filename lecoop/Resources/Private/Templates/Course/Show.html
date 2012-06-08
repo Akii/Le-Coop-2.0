@@ -18,7 +18,7 @@
 		<f:security.ifAuthenticated>
 		    <f:then>
 			<f:if condition="{course.canSubscribe}">
-			    <f:link.action action="subscribe" arguments="{course: '{course}'}" class="btn btn-primary">Subscribe!</f:link.action>
+			    <f:link.action action="subscribe" arguments="{course: '{course}', user: '{fe_user}'}" class="btn btn-primary">Subscribe!</f:link.action>
 			</f:if>
 		    </f:then>
 		    <f:else>

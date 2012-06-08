@@ -122,16 +122,6 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect(null, null, null, null, '24');
 	}
-	// since I don't know if hidden form fields are protected by chash,
-	// we have to check at this point if the owner is still the fe_userid.
-	// At this point we know that an ownerid is set because of @validate NotEmpty
-//	if ($newCourse->getOwnerid()->getUid() !== intval($GLOBALS['TSFE']->fe_user->user['uid'])) {
-//	    var_dump($newCourse->getOwnerid()->getUid());
-//	    var_dump($GLOBALS['TSFE']->fe_user->user['uid']);
-//	    // I suspect manipulation, give a warning and redirect to newAction
-//	    $this->flashMessageContainer->add('There has been an error validating the owner of the course. In case you manipulated the form you failed, otherwise you found a bug.', 'Owner Validation Failure', t3lib_FlashMessage::ERROR);
-//	    $this->redirect('new', null, null, null);
-//	}
 
 	$this->courseRepository->add($newCourse);
 	$this->flashMessageContainer->add('Your new Course was created.');
@@ -209,13 +199,39 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @todo Move validation up to the abstract class
      * @return void 
      */
-    public function rateAction(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_Rating $rating) {
-	if(!$course->getCanRate() || $GLOBALS['TSFE']->fe_user === false || $rating->getUserid()->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
+    public function rateAction(Tx_Lecoop_Domain_Model_Course $course = NULL, Tx_Lecoop_Domain_Model_Rating $rating = NULL) {
+	if($course === NULL || $rating === NULL)
+	    $this->redirect('featured');
+	
+	if(!$course->getCanRate() || $rating->getUserid()->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('show', null, null, array('course' => $course));
 	}
 	
 	$course->addRating($rating);
+	$this->flashMessageContainer->add('You\'ve successfully rated the course.');
+	$this->redirect('show', null, null, array('course' => $course));
+    }
+    
+    /**
+     * action subscribe
+     * 
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @param Tx_Lecoop_Domain_Model_User $user
+     * @todo Move validation up to the abstract class
+     * @return void
+     */
+    public function subscribeAction(Tx_Lecoop_Domain_Model_Course $course = NULL, Tx_Lecoop_Domain_Model_User $user = NULL) {
+	if($course === NULL || $user === NULL)
+	    $this->redirect('featured');
+	
+	if(!$course->getCanSubscribe() || $GLOBALS['TSFE']->fe_user === false || $user->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect('show', null, null, array('course' => $course));
+	}
+	
+	$course->addSubscription($user);
+	$this->flashMessageContainer->add('You\'ve subscribed to the course.');
 	$this->redirect('show', null, null, array('course' => $course));
     }
     
