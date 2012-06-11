@@ -25,13 +25,9 @@
  * ************************************************************* */
 
 /**
- * This view helper uses the technology of paginate widget but works with arrays
- * and the assigned objects don't need the QueryResultInterface.
  *
- * @package    Typo3
  *
- * @author     Armin Rüdiger Vieweg <info@professorweb.de>
- * @author     Benjamin Schulte <benjamin.schulte@diemedialen.de>
+ * @package lecoop
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_Lecoop_ViewHelpers_Widget_Controller_ScheduleController extends Tx_Fluid_Core_Widget_AbstractWidgetController {
@@ -39,12 +35,12 @@ class Tx_Lecoop_ViewHelpers_Widget_Controller_ScheduleController extends Tx_Flui
     /**
      * @var array
      */
-    protected $configuration = array();
+    protected $configuration = array('monthOffset' => 0);
 
     /**
      * @var Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Event>
      */
-    protected $objects;
+    protected $events;
 
     /**
      * Initialize Action of the widget controller
@@ -52,7 +48,7 @@ class Tx_Lecoop_ViewHelpers_Widget_Controller_ScheduleController extends Tx_Flui
      * @return void
      */
     public function initializeAction() {
-	$this->objects = $this->widgetConfiguration['objects'];
+	$this->events = $this->widgetConfiguration['events'];
 	$this->configuration = t3lib_div::array_merge_recursive_overrule($this->configuration, $this->widgetConfiguration['configuration'], TRUE);
     }
 
@@ -63,7 +59,91 @@ class Tx_Lecoop_ViewHelpers_Widget_Controller_ScheduleController extends Tx_Flui
      * @return void
      */
     public function indexAction() {
+	$year = date('Y');
+	$month = date('n');
+	$today = date('m/d/Y');
 	
+	if($this->configuration['monthOffset'] != 0) {
+	    $month += intval($this->configuration['monthOffset']);
+	    
+	    //@todo: this doesn't work for offsets less than 1 so rewrite this with DateTime intervals
+	    if($month > 12) {
+		$month = 1;
+		$year++;
+	    }
+	}
+
+	$dates = array();
+	foreach ($this->events as $event) {
+	    foreach ($event->findEvents() as $date) {
+		$dates[$date->format('m/d/Y')][] = array(
+		    'length' => $event->getLength()->format('H:i'),
+		    'date' => $date,
+		    'description' => $event->getDescription()
+		);
+	    }
+	}
+	
+	$schedule = array(
+	    'year'  => $year,
+	    'month' => $month,
+	    'today' => $today,
+	    'calendar' => $this->getCalendar($year, $month, $dates)
+	);
+	
+	$this->view->assign('schedule', $schedule);
+    }
+
+    /**
+     * Fills an array with days of the month and events
+     * 
+     * @param int $year
+     * @param int $month 
+     * @param array $events
+     * @return array
+     */
+    protected function getCalendar($year, $month, $events) {
+	$week_day = date('w', mktime(0, 0, 0, $month, 1, $year));
+	$week_day = ($week_day == 0) ? 6 : $week_day - 1;
+
+	$days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+	$week = 0;
+	$days_in_week = 0;
+
+	$dates = array();
+
+	// build up zero dates of last month
+	for ($i = 0; $i < $week_day; $i++) {
+	    $dates[$week][$i] = array();
+	    $days_in_week++;
+	}
+
+	// build up the month
+	for ($curr_day = 1; $curr_day <= $days_in_month; $curr_day++) {
+	    
+	    $date = date('m/d/Y', mktime(0, 0, 0, $month, $curr_day, $year));
+	    
+	    $dates[$week][$days_in_week] = array(
+		'day' => $date,
+		'date' => new DateTime($date),
+		'events' => $events[$date]
+	    );
+
+
+	    if ($days_in_week == 6) {
+		$days_in_week = -1;
+		$week++;
+	    }
+
+	    $days_in_week++;
+	}
+
+	// build up zero for the next month
+	for ($i = $days_in_week; $i <= 6; $i++) {
+	    $dates[$week][$i] = array();
+	}
+	
+	return $dates;
     }
 
 }

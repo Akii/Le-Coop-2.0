@@ -7,13 +7,13 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Course',
 	array(
-		'Course' => 'featured, new, create, edit, update, delete, show, subscribe, search, rate',
+		'Course' => 'featured, new, create, edit, update, delete, show, subscribe, search, rate, addTag',
 		'Schedule' => 'update, newEvent, createEvent, editEvent, updateEvent, deleteEvent'
 	),
 	// non-cacheable actions
         // @todo remove featured from cached action list
 	array(
-		'Course' => 'new, create, edit, update, delete, search, rate, subscribe, featured, show',
+		'Course' => 'new, create, edit, update, delete, rate, subscribe, addTag',
 		'Schedule' => 'update, newEvent, createEvent, editEvent, updateEvent, deleteEvent'
 	)
 );
@@ -71,7 +71,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	),
 	// non-cacheable actions
 	array(
-		'Course' => 'list',
+		'Course' => '',
 		
 	)
 );

@@ -6,7 +6,7 @@
     <ul class="course_link">
 	<vh:widget.paginate objects="{courses}" as="courses_pag" configuration="{itemsPerPage: 3, insertBelow: 0}">
 	    <f:for each="{courses_pag}" as="course">
-		<f:render partial="Course/CourseLinkItem" arguments="{course: '{course}'}" />
+		<f:render partial="Course/CourseLinkItem" arguments="{course: '{course}', fe_user: '{fe_user}'}" />
 	    </f:for>
 	</vh:widget.paginate>
     </ul>

@@ -1,45 +1,46 @@
-<f:layout name="Default" />
-
-This Template is responsible for creating a table of domain objects.
-
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        List.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
+{namespace vh = Tx_Lecoop_ViewHelpers}
+<f:layout name="DefaultNoFrame" />
 <f:section name="main">
-<h1>Listing for Course</h1>
-
-<f:flashMessages />
-
-<table  class="tx_lecoop" >
-	<tr>
-		<th><f:translate key="tx_lecoop_domain_model_course.title" /></th>
-		<th><f:translate key="tx_lecoop_domain_model_course.description" /></th>
-		<th><f:translate key="tx_lecoop_domain_model_course.type" /></th>
-		<th><f:translate key="tx_lecoop_domain_model_course.featstart" /></th>
-		<th><f:translate key="tx_lecoop_domain_model_course.featend" /></th>
-		<th><f:translate key="tx_lecoop_domain_model_course.nextevent" /></th>
-		<th> </th>
-		<th> </th>
-	</tr>
-
+    <table class="table table-bordered table-condensed table-striped table-hover">
+	<thead>
+	<th>Title</th>
+	<th>Type</th>
+	<th>Tags</th>
+	<th>Next Event</th>
+	<th>Rating</th>
+	<th>Subscribers</th>
+	<th>Actions</th>
+	</thead>
+	<tbody>
 	<f:for each="{courses}" as="course">
-		<tr>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.title}</f:link.action></td>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.description}</f:link.action></td>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.type}</f:link.action></td>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.featstart -> f:format.date()}</f:link.action></td>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.featend -> f:format.date()}</f:link.action></td>
-			<td><f:link.action action="show" arguments="{course : course}"> {course.nextevent -> f:format.date()}</f:link.action></td>
-			<td><f:link.action action="edit" pageUid="15" controller="Course" arguments="{course : course}">Edit</f:link.action></td>
-			<td><f:link.action action="delete" arguments="{course : course}">Delete</f:link.action></td>
-		</tr>
+	    <tr>
+		<td>
+	    <f:if condition="{course.isFeatured}"><i class="icon-star" title="Featured course"></i></f:if>
+		    {course.title}</td>
+	<td>
+	<f:if condition="{course.type}">
+	    <f:then><span class="label label-info">Course</span></f:then>
+	    <f:else><span class="label label-info">Learning Group</span></f:else>
+	</f:if>
+	</td>
+		<td>
+	    <f:for each="{course.tags}" as="tag">
+		{tag.name} 
+	    </f:for>
+	    </td>
+	    <td><f:format.date format="m/d/Y">{course.scheduleid.nextEvent}</f:format.date></td>
+	    <td><vh:rating rating="{course.avgRating}" /></td>
+	    <td>{f:count(subject: '{course.subscriptions}')}</td>
+	    <td>
+		<span class="pull-right">
+	    <f:if condition="{vh:course.canEdit(course: '{course}', user: '{fe_user}')}">
+		<f:link.action class="" action="edit" arguments="{course: '{course}'}" title="Edit"><i class="icon-cog"></i></f:link.action>
+	    </f:if>
+	    <f:link.action class="" action="show" arguments="{course: '{course}'}" title="View"><i class="icon-search"></i></f:link.action>
+		</span>
+	    </td>
+	    </tr>
 	</f:for>
-</table>
-<f:link.action action="new">New Course</f:link.action>
+	</tbody>
+    </table>
 </f:section>

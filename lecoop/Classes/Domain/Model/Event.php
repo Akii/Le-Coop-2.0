@@ -177,7 +177,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 	if($this->getIsOutdated())
 	    return NULL;
 
-	$events = $this->_findEvents();
+	$events = $this->findEvents();
 
 	// linear search should suffice
 	foreach ($events as $event) {
@@ -200,7 +200,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
 //	if($this->getIsOutdated())
 //	    return 0;
 
-	$events = $this->_findEvents();
+	$events = $this->findEvents();
 
 	if (!$calc_remain)
 	    return count($events);
@@ -259,7 +259,7 @@ class Tx_Lecoop_Domain_Model_Event extends Tx_Extbase_DomainObject_AbstractEntit
      * 
      * @return array<DateTime> Sorted array containing all dates
      */
-    protected function _findEvents() {
+    public function findEvents() {
 	// in case this is a single event return the one event if it is still in the future
 	if($this->_getEventType() === Tx_Lecoop_Domain_Model_Event::EVENT_SINGLE) {
 	    return array($this->start);

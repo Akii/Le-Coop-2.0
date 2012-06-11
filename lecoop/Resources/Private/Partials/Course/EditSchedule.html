@@ -1,28 +1,12 @@
 {namespace fed = Tx_Fed_ViewHelpers}
+{namespace vh = Tx_Lecoop_ViewHelpers}
 <f:form class="form-horizontal" controller="Schedule" action="update" name="schedule" object="{schedule}">
     <fieldset>
 	<legend>Schedule</legend>
-	<div class="control-group">
-	    <label class="control-label" for="start">
-		<f:translate key="tx_lecoop_domain_model_schedule.start" />*
-	    </label>
-	    <div class="controls">
-		<f:form.textfield class="datepicker" property="start"  value="{schedule.start->f:format.date(format: 'm/d/y')}" />
-		<p></p>
-	    </div>
-	    <label class="control-label" for="end">
-		<f:translate key="tx_lecoop_domain_model_schedule.end" />*
-	    </label>
-	    <div class="controls">
-		<f:form.textfield class="datepicker" property="end"  value="{schedule.end->f:format.date(format: 'm/d/y')}" />
-		<p></p>
-	    </div>
-	</div>
-
-
-	<div class="form-actions">
-	    <f:form.hidden name="course" value="{course}" />
-	    <f:form.submit class="btn btn-primary" value="Update Schedule" />
+	<br/>
+	<div class="row">
+	    <div class="span5"><vh:widget.schedule events="{course.scheduleid.events}"/></div>
+	    <div class="span5 offset1"><vh:widget.schedule events="{course.scheduleid.events}" configuration="{monthOffset: 1}"/></div>
 	</div>
 	<legend>Events</legend>
 

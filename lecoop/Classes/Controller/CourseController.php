@@ -73,7 +73,12 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @param $course
      * @return void
      */
-    public function showAction(Tx_Lecoop_Domain_Model_Course $course) {
+    public function showAction(Tx_Lecoop_Domain_Model_Course $course = NULL) {
+	if ($course === NULL) {
+	    $this->flashMessageContainer->add('Requested course does not exist.', null, t3lib_FlashMessage::WARNING);
+	    $this->redirect('featured');
+	}
+
 	$this->view->assign('course', $course);
     }
 
@@ -86,11 +91,11 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function newAction(Tx_Lecoop_Domain_Model_Course $newCourse = NULL) {
 	$permissions = $this->getPermissions($newCourse);
-	if($permissions['login'] !== true) {
+	if ($permissions['login'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect(null, null, null, null, '24');
 	}
-	
+
 	if ($newCourse === NULL) {
 	    $newCourse = t3lib_div::makeInstance('Tx_Lecoop_Domain_Model_Course');
 	}
@@ -118,7 +123,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function createAction(Tx_Lecoop_Domain_Model_Course $newCourse) {
 	$permissions = $this->getPermissions($newCourse);
-	if($permissions['create'] !== true) {
+	if ($permissions['create'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect(null, null, null, null, '24');
 	}
@@ -144,11 +149,11 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function editAction(Tx_Lecoop_Domain_Model_Course $course, $activeTab = 1) {
 	$permissions = $this->getPermissions($course);
-	if($permissions['update'] !== true) {
+	if ($permissions['update'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect(null, null, null, null, '24');
 	}
-	
+
 	$this->view->assign('course', $course);
 	$this->view->assign('tab', intval($activeTab));
     }
@@ -161,11 +166,11 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function updateAction(Tx_Lecoop_Domain_Model_Course $course) {
 	$permissions = $this->getPermissions($course);
-	if($permissions['update'] !== true) {
+	if ($permissions['update'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('edit', null, null, array('course' => $course));
 	}
-	
+
 	$this->courseRepository->update($course);
 	$this->flashMessageContainer->add('Your Course was updated.');
 
@@ -181,11 +186,11 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function deleteAction(Tx_Lecoop_Domain_Model_Course $course) {
 	$permissions = $this->getPermissions($course);
-	if($permissions['delete'] !== true) {
+	if ($permissions['delete'] !== true) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect(null, null, null, null, '24');
 	}
-	
+
 	$this->courseRepository->remove($course);
 	$this->flashMessageContainer->add('Your Course was removed.');
 	$this->redirect('ucp', 'User', 'Ucp', null, '13');
@@ -200,19 +205,19 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void 
      */
     public function rateAction(Tx_Lecoop_Domain_Model_Course $course = NULL, Tx_Lecoop_Domain_Model_Rating $rating = NULL) {
-	if($course === NULL || $rating === NULL)
+	if ($course === NULL || $rating === NULL)
 	    $this->redirect('featured');
-	
-	if(!$course->getCanRate() || $rating->getUserid()->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
+
+	if (!$course->canRate($rating->getUserid()) || $rating->getUserid()->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('show', null, null, array('course' => $course));
 	}
-	
+
 	$course->addRating($rating);
 	$this->flashMessageContainer->add('You\'ve successfully rated the course.');
 	$this->redirect('show', null, null, array('course' => $course));
     }
-    
+
     /**
      * action subscribe
      * 
@@ -222,27 +227,52 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      * @return void
      */
     public function subscribeAction(Tx_Lecoop_Domain_Model_Course $course = NULL, Tx_Lecoop_Domain_Model_User $user = NULL) {
-	if($course === NULL || $user === NULL)
+	if ($course === NULL || $user === NULL)
 	    $this->redirect('featured');
-	
-	if(!$course->getCanSubscribe() || $GLOBALS['TSFE']->fe_user === false || $user->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
+
+	if (!$course->canSubscribe($user) || $user->getUid() != $GLOBALS['TSFE']->fe_user->user['uid']) {
 	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
 	    $this->redirect('show', null, null, array('course' => $course));
 	}
-	
+
 	$course->addSubscription($user);
 	$this->flashMessageContainer->add('You\'ve subscribed to the course.');
 	$this->redirect('show', null, null, array('course' => $course));
     }
-    
+
+    /**
+     * action addTag
+     * 
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @param Tx_Lecoop_Domain_Model_Tag $tag
+     * 
+     * @return void 
+     */
+    public function addTagAction(Tx_Lecoop_Domain_Model_Course $course = NULL, Tx_Lecoop_Domain_Model_Tag $tag = NULL) {
+	if ($course === NULL || $tag === NULL)
+	    $this->redirect('featured');
+
+	$permissions = $this->getPermissions($course);
+	if ($permissions['update'] !== true) {
+	    $this->flashMessageContainer->add(Tx_Lecoop_Controller_AbstractController::PERMISSION_DENIED, null, t3lib_FlashMessage::ERROR);
+	    $this->redirect(null, null, null, null, '24');
+	}
+
+	$course->addTag($tag);
+	$this->flashMessageContainer->add('Your Tag has been added.');
+	$this->redirect('edit', null, null, array('course' => $course));
+    }
+
     /**
      * action featured
      *
      * @return void
      */
     public function featuredAction() {
-	$featured = $this->courseRepository->findFeatured();
-	$this->view->assign('courses', $featured);
+//	$featured = $this->courseRepository->findFeatured();
+//	$this->view->assign('courses', $featured);
+	
+	$this->forward('list');
     }
 
     /**
@@ -261,7 +291,7 @@ class Tx_Lecoop_Controller_CourseController extends Tx_Lecoop_Controller_Abstrac
      */
     public function upcomingAction() {
 	$courses = $this->courseRepository->findUpcoming();
-	
+
 	$this->view->assign('courses', $courses);
     }
 

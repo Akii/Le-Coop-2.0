@@ -1,11 +1,33 @@
+{namespace vh=Tx_Lecoop_ViewHelpers}
 <li onClick="window.location.href='{f:uri.action(action: 'show', controller: 'Course', pageUid: '15', arguments: '{course: course}')}'">
     <span class="month"><f:format.date format="M">{course.scheduleid.nextEvent}</f:format.date></span>
     <span class="day"><i class="number"><f:format.date format="j">{course.scheduleid.nextEvent}</f:format.date></i></span>
     <span class="content">
 	<h3>{course.title}</h3>
-	<small>BWL, WIF 2, Tutorial(todo)</small>
-	<f:if condition="{course.canEdit}">
-	    <f:link.action class="editAction" action="edit" controller="Course" pageUid="15" arguments="{course: '{course}'}" title="Edit"><i class="icon-edit"></i></f:link.action>
-	</f:if>
+	<small>
+	    <f:format.crop maxCharacters="100" append="&nbsp;[...]" respectHtml="false">
+		<f:for each="{course.tags}" as="tag" iteration="it">
+		    <f:if condition="{it.isLast}">
+			<f:then>
+			    {tag.name}
+			</f:then>
+			<f:else>
+			    {tag.name}, 
+			</f:else>
+		    </f:if>
+		</f:for>
+	    </f:format.crop>
+	    <f:if condition="{f:count(subject: '{course.tags}')} == 0">
+		no tags
+	    </f:if>
+	</small>
+	<span class="course-controls">
+	    <f:if condition="{vh:course.isSubscribed(course: '{course}', user: '{fe_user}')}">
+		<i class="icon-star" title="Subscribed"></i>
+	    </f:if>
+	    <f:if condition="{vh:course.canEdit(course: '{course}', user: '{fe_user}')}">
+		<f:link.action action="edit" controller="Course" pageUid="15" arguments="{course: '{course}'}" title="Edit"><i class="icon-cog"></i></f:link.action>
+	    </f:if>
+	</span>
     </span>
 </li>

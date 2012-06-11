@@ -1,36 +1,84 @@
 {namespace fed=Tx_Fed_ViewHelpers}
+<div id="addTagBtn-dialog" class="hide" title="Add Tag">
+    <p>
+    <f:form class="form-inline" action="addTag" name="tag" object="{tag}">
+	<f:form.textfield property="name" />
+	<f:form.hidden name="course" value="{course}" />
+	<f:form.submit class="btn" value="Save" />
+    </f:form>
+</p>
+</div>
+
+<f:if condition="{course.scheduleid.start}">
+    <f:else>
+	<br/>
+	<div class="alert alert-info">
+	    <strong class="alert-heading">Schedule</strong>
+	    <span>
+		You haven't set the schedule start and end yet. Once you do, your course/learning group will be visible to other users so be sure to verify your title and description.
+		Also, once set you cannot unset it again.
+	    </span>
+	</div>
+    </f:else>
+</f:if>
+
 <f:form class="form-horizontal" action="update" name="course" object="{course}">
     <fieldset>
-	    <legend>General Settings</legend>
-	    <div class="control-group">
-		    <label class="control-label" for="type">
-			    <f:translate key="tx_lecoop_domain_model_course.type" />*
-		    </label>
-		    <div class="controls">
-			    <fed:auth.allow frontendUserGroup="{tutorGrp}">
-				    <f:then><f:form.select class="input-xlarge" property="type" options="{0: 'Learning Group', 1: 'Course'}" /></f:then>
-				    <f:else><f:form.select class="input-xlarge" property="type" options="{0: 'Learning Group'}" /></f:else>
-			    </fed:auth.allow>
-			    <p></p>
-		    </div>
-		    <label class="control-label" for="title">
-			    <f:translate key="tx_lecoop_domain_model_course.title" />*
-		    </label>
-		    <div class="controls">
-			    <f:form.textfield class="input-xlarge" property="title" />
-			    <p></p>
-		    </div>
-		    <label class="control-label" for="description">
-			    <f:translate key="tx_lecoop_domain_model_course.description" />*
-		    </label>
-		    <div class="controls">
-			    <f:form.textarea class="tinymce input-xlarge" property="description" cols="40" rows="15" />
-			    <p></p>
-		    </div>
+	<legend>General Settings</legend>
+	<div class="control-group">
+	    <label class="control-label" for="type">
+		<f:translate key="tx_lecoop_domain_model_course.type" />*
+	    </label>
+	    <div class="controls">
+		<fed:auth.allow frontendUserGroup="{tutorGrp}">
+		    <f:then><f:form.select class="input-xlarge" property="type" options="{0: 'Learning Group', 1: 'Course'}" /></f:then>
+		    <f:else><f:form.select class="input-xlarge" property="type" options="{0: 'Learning Group'}" /></f:else>
+		</fed:auth.allow>
+		<p></p>
 	    </div>
+	    <label class="control-label" for="title">
+		<f:translate key="tx_lecoop_domain_model_course.title" />*
+	    </label>
+	    <div class="controls">
+		<f:form.textfield class="input-xlarge" property="title" />
+		<p></p>
+	    </div>
+	    <label class="control-label" for="start">
+		<f:translate key="tx_lecoop_domain_model_schedule.start" />*
+	    </label>
+	    <div class="controls">
+		<f:form.textfield class="datepicker" property="scheduleid.start"  value="{course.scheduleid.start->f:format.date(format: 'm/d/y')}" />
+		<p></p>
+	    </div>
+	    <label class="control-label" for="end">
+		<f:translate key="tx_lecoop_domain_model_schedule.end" />*
+	    </label>
+	    <div class="controls">
+		<f:form.textfield class="datepicker" property="scheduleid.end"  value="{course.scheduleid.end->f:format.date(format: 'm/d/y')}" />
+		<p></p>
+	    </div>
+	    <hr/>
+	    <label class="control-label" for="tags">
+		<f:translate key="tx_lecoop_domain_model_course.tags" />
+	    </label>
+	    <div class="controls">
+		<f:form.select multiple="true" property="tags" options="{course.tags}" value="{course.tags}" optionValueField="uid" optionLabelField="name"/>
+		<p><button id="addTagBtn" class="btn btn-primary" href="#"><i class="icon-plus icon-white"></i> Add Tag</button></p>
+	    </div>
+	    <hr/>
+	    <label class="control-label" for="description">
+		<f:translate key="tx_lecoop_domain_model_course.description" />*
+	    </label>
+	    <div class="controls">
+		<f:form.textarea class="tinymce input-xlarge" property="description" cols="40" rows="15" />
+		<p></p>
+	    </div>
+	</div>
 
-	    <div class="form-actions">
-		    <f:form.submit class="btn btn-primary" value="Update Course" />
-	    </div>
+	<div class="form-actions">
+	    <f:form.hidden property="scheduleid.events" value="" />
+	    <f:form.hidden property="scheduleid.exceptions" value="{esceptions}" />
+	    <f:form.submit class="btn btn-primary" value="Update Course" />
+	</div>
     </fieldset>
 </f:form>

@@ -1,1 +1,32 @@
-<f:debug>{schedule}</f:debug>
+<table class="table table-bordered table-condensed table-schedule">
+    <thead>
+	<tr>
+	    <th></th>
+	    <th colspan="5" style="text-align: center;">{schedule.month} / {schedule.year}</th>
+	    <th></th>
+	</tr>
+	<tr>
+	    <th>Mon</th>
+	    <th>Tue</th>
+	    <th>Wed</th>
+	    <th>Thu</th>
+	    <th>Fri</th>
+	    <th>Sat</th>
+	    <th>Sun</th>
+	</tr>
+    </thead>
+    <tbody>
+       <f:for each="{schedule.calendar}" as="week">
+	    <tr>
+	    <f:for each="{week}" as="day">
+		<td class="{f:if(condition: '{day.date}', else: 'no-date')} {f:if(condition: '{day.events}', then: 'schedule-event')} {f:if(condition: '{day.day} == {schedule.today}', then: 'today')}">
+		    <f:format.date format="d">{day.date}</f:format.date>
+		    <f:for each="{day.events}" as="event">
+			<p class="tipsy" title="{event.description}"><span class="label label-info"><f:format.date format="H:i">{event.date}</f:format.date></span></p>
+		    </f:for>
+		</td>
+	    </f:for>
+	    </tr>
+	</f:for>
+    </tbody>
+</table>

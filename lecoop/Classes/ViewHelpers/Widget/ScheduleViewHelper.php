@@ -25,11 +25,9 @@
  * ************************************************************* */
 
 /**
- * This widget is a copy of the fluid paginate widget. Now it's possible to
- * use arrays with paginate, not only query results.
  *
- * @author     Armin Rüdiger Vieweg <info@professorweb.de>
- * @copyright  2011 Copyright belongs to the respective authors
+ *
+ * @package lecoop
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_Lecoop_ViewHelpers_Widget_ScheduleViewHelper extends Tx_Fluid_Core_Widget_AbstractWidgetViewHelper {
@@ -53,11 +51,10 @@ class Tx_Lecoop_ViewHelpers_Widget_ScheduleViewHelper extends Tx_Fluid_Core_Widg
      * The render method of widget
      *
      * @param Tx_Extbase_Persistence_ObjectStorage<Tx_Lecoop_Domain_Model_Event> $events
-     * @param string $as
      * @param array $configuration
      * @return string
      */
-    public function render($events, $as, array $configuration = array()) {
+    public function render($events, array $configuration = array('monthOffset' => 0)) {
 	return $this->initiateSubRequest();
     }
 

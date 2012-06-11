@@ -70,10 +70,10 @@ class Tx_Lecoop_Domain_Repository_CourseRepository extends Tx_Extbase_Persistenc
 	$query = $this->createQuery();
 	
 	$query->statement('
-	    SELECT DISTINCT c.*
+	    SELECT c.*
 	    FROM tx_lecoop_domain_model_course c
 	    JOIN (
-	    SELECT sh.uid uid, IF(e.start < UNIX_TIMESTAMP(), DATE_ADD(FROM_UNIXTIME(e.start), INTERVAL +((FLOOR((FLOOR(TIMESTAMPDIFF(HOUR, FROM_UNIXTIME(e.start), NOW()) / 24) / e.steplength))) +1) * e.steplength DAY), FROM_UNIXTIME(e.start)) event
+	    SELECT sh.uid uid, MIN(IF(e.start < UNIX_TIMESTAMP(), DATE_ADD(FROM_UNIXTIME(e.start), INTERVAL +((FLOOR((FLOOR(TIMESTAMPDIFF(HOUR, FROM_UNIXTIME(e.start), NOW()) / 24) / e.steplength))) +1) * e.steplength DAY), FROM_UNIXTIME(e.start))) event
 	    FROM tx_lecoop_domain_model_event e
 	    JOIN tx_lecoop_domain_model_schedule sh ON(e.schedule = sh.uid)
 	    WHERE sh.start <= UNIX_TIMESTAMP() AND sh.end >= UNIX_TIMESTAMP()
@@ -83,6 +83,7 @@ class Tx_Lecoop_Domain_Repository_CourseRepository extends Tx_Extbase_Persistenc
 		(e.steplength > 0 AND e.end > UNIX_TIMESTAMP()) -- show multi when steplength greater and end not yet reached
 	    )
 	    AND e.hidden = 0 AND e.deleted = 0 AND sh.hidden = 0 AND sh.deleted = 0
+	    GROUP BY sh.uid
 	    ) iv ON(c.scheduleid = iv.uid)
 	    WHERE c.hidden = 0 AND c.deleted = 0
 	    ORDER BY iv.event;

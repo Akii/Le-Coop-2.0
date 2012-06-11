@@ -1,6 +1,6 @@
 <?php
 
-/***************************************************************
+/* * *************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Maier Philipp <Zedd@akii.de>
@@ -22,7 +22,7 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * ************************************************************* */
 
 /**
  *
@@ -31,64 +31,18 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_Lecoop_Domain_Model_Tag extends Tx_Extbase_DomainObject_AbstractValueObject {
+class Tx_Lecoop_ViewHelpers_Course_CanRateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 
-	/**
-	 * Tag name
-	 *
-	 * @var string
-	 * @validate NotEmpty
-	 */
-	protected $name;
-
-	/**
-	 * hex string of the color
-	 *
-	 * @var string
-	 */
-	protected $color;
-
-	/**
-	 * Returns the name
-	 *
-	 * @return string $name
-	 */
-	public function getName() {
-		return $this->name;
-	}
-
-	/**
-	 * Sets the name
-	 *
-	 * @param string $name
-	 * @return void
-	 */
-	public function setName($name) {
-		$this->name = $name;
-	}
-
-	/**
-	 * Returns the color
-	 *
-	 * @return string $color
-	 */
-	public function getColor() {
-		return $this->color;
-	}
-
-	/**
-	 * Sets the color
-	 *
-	 * @param string $color
-	 * @return void
-	 */
-	public function setColor($color) {
-		$this->color = $color;
-	}
-	
-	public function __toString() {
-	    return $this->name;
-	}
+    /**
+     * Checks whether an user has rated already or not
+     *
+     * @param Tx_Lecoop_Domain_Model_Course $course
+     * @param Tx_Lecoop_Domain_Model_User $user
+     * @return boolean True if the user has not yet rated the course
+     */
+    public function render(Tx_Lecoop_Domain_Model_Course $course, Tx_Lecoop_Domain_Model_User $user = NULL) {
+	return $course->canRate($user);
+    }
 
 }
 ?>

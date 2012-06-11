@@ -437,49 +437,60 @@ class Tx_Lecoop_Domain_Model_Course extends Tx_Extbase_DomainObject_AbstractEnti
      *
      * @return bool
      */
-    public function isFeatured() {
-	return ($this->featstart < TIME() && $this->featend > TIME());
+    public function getIsFeatured() {
+	$today = new DateTime();
+	return ($this->featstart < $today && $this->featend > $today);
     }
 
     /**
      * Returns if the course can be edited by the user
      * 
+     * @param Tx_Lecoop_Domain_Model_User $user
      * @return boolean
      */
-    public function getCanEdit() {
-	if ($GLOBALS['TSFE']->fe_user->user !== false) {
-	    return ($this->getOwnerid()->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']);
-	}
-	return false;
+    public function canEdit(Tx_Lecoop_Domain_Model_User $user = NULL) {
+	return ($user !== NULL && $this->ownerid->getUid() == $user->getUid());
+    }
+    
+    /**
+     * Returns if a user can subscribe to the course
+     * 
+     * @param Tx_Lecoop_Domain_Model_User $user
+     * @return boolean 
+     */
+    public function canSubscribe(Tx_Lecoop_Domain_Model_User $user = NULL) {
+	if($user === NULL || $this->canEdit($user)) return false;
+	
+	return !$this->subscriptions->contains($user);
     }
     
     /**
      * Returns if a user has subscribed to the course
      * 
-     * @todo This has to be rewritten if this extension is used on production sites
+     * @param Tx_Lecoop_Domain_Model_User $user
      * @return boolean 
      */
-    public function getCanSubscribe() {
-	if($this->getCanEdit()) return false;
-	if($GLOBALS['TSFE']->fe_user->user == false) return false;
-	
-	foreach($this->subscriptions as $subscriber)
-		if($subscriber->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']) return false;
-	
-	return true;
+    public function isSubscribed(Tx_Lecoop_Domain_Model_User $user = NULL) {
+	if($user === NULL)
+	    return false;
+	else
+	    return $this->subscriptions->contains($user);
     }
     
     /**
      * Returns whether a user has rated the course already
      * 
+     * @param Tx_Lecoop_Domain_Model_User $user
+     * @todo optimize this check.. somehow
      * @return boolean 
      */
-    public function getCanRate() {
-	if($this->getCanEdit() || $this->getCanSubscribe()) return false;
-	if($GLOBALS['TSFE']->fe_user->user == false) return false;
+    public function canRate(Tx_Lecoop_Domain_Model_User $user = NULL) {
+	if($user === NULL || $this->canEdit($user) || $this->canSubscribe($user)) return false;
+	
+	$userid = $user->getUid();
 	
 	foreach($this->rating as $rating)
-		if($rating->getUserid()->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']) return false;
+		if($rating->getUserid()->getUid() == $userid) return false;
 	
 	return true;
     }

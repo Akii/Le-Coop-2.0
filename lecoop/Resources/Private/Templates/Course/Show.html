@@ -2,22 +2,30 @@
 <f:layout name="Course" />
 <f:section name="main">
 
-    <f:flashMessages />
+    <f:flashMessages renderMode="div" />
     <div class="row">
 	<div class="span10">
-
-	    <div class="btn-group tags">
-		<button class="btn btn-toolbar btn-primary"><i class="icon-tags icon-white"></i> Tags:</button>
-		<f:for each="{0: 'eins', 1: 'zwei', 2: 'drei', 3: 'vier', 4: 'fünf', 5: 'sechs', 6: 'sieben', 7: 'acht'}" as="tag">
-		    <button class="btn btn-toolbar">{tag}</button>
-		</f:for>
-	    </div>
+	    <f:if condition="{f:count(subject: '{course.tags}')} > 0">
+		<div class="btn-group tags">
+		    <button class="btn btn-toolbar btn-primary"><i class="icon-tags icon-white"></i> Tags:</button>
+		    <f:for each="{course.tags}" as="tag">
+			<button class="btn btn-toolbar">{tag.name}</button>
+		    </f:for>
+		    <f:if condition="{vh:course.canEdit(course: '{course}', user: '{fe_user}')}">
+			<f:link.action class="btn btn-toolbar btn-success" action="edit" arguments="{course: '{course}'}" title="Add Tag"><i class="icon-plus"></i></f:link.action>
+		    </f:if>
+		</div>
+	    </f:if>
+	    &nbsp;
 	</div>
 	<div class="span3 offset1">
 	    <div class="btn-group pull-right">
 		<f:security.ifAuthenticated>
 		    <f:then>
-			<f:if condition="{course.canSubscribe}">
+			<f:if condition="{vh:course.canEdit(course: '{course}', user: '{fe_user}')}">
+			    <f:link.action action="edit" arguments="{course: '{course}'}" class="btn btn-primary"><i class="icon-cog icon-white"></i> Edit</f:link.action>
+			</f:if>
+			<f:if condition="{vh:course.canSubscribe(course: '{course}', user: '{fe_user}')}">
 			    <f:link.action action="subscribe" arguments="{course: '{course}', user: '{fe_user}'}" class="btn btn-primary">Subscribe!</f:link.action>
 			</f:if>
 		    </f:then>
@@ -31,12 +39,12 @@
 		    <ul class="dropdown-menu">
 			<f:for each="{course.subscriptions}" as="subscriber">
 			    <li>
-			    <f:link.page pageUid="13">
+			    <f:link.action action="show" arguments="{course: '{course}'}">
 				<f:if condition="{subscriber.name}">
 				    <f:then>{subscriber.name}</f:then>
 				    <f:else>{subscriber.username}</f:else>
 				</f:if>
-			    </f:link.page>
+			    </f:link.action>
 			    </li>
 			</f:for>
 		    </ul>
@@ -52,7 +60,8 @@
 		    <span class="span1 label">Rating:</span>&nbsp;
 		<vh:rating rating="{course.avgRating}"/>
 		</p>
-		<f:if condition="{course.canRate}">
+		<f:if condition="{vh:course.canRate(course: '{course}', user: '{fe_user}')}">
+		    <hr/>
 		    <span class="span2">
 			<f:form class="form-inline span3" controller="Course" action="rate" name="rating" object="{rating}">
 			    <f:form.select class="input-small" property="rating" options="{1: '1 Star', 2: '2 Stars', 3: '3 Stars', 4: '4 Stars', 5: '5 Stars'}" />
@@ -73,10 +82,11 @@
     <div class="row spanpadding">
 	<div class="span13">
 	    <h3>Schedule</h3>
+	    <br/>
 	</div>
     </div>
     <div class="row">
-	<div class="span7">sdf</div>
-	<div class="span7">sf</div>
+	<div class="span6 offset1"><vh:widget.schedule events="{course.scheduleid.events}"/></div>
+	<div class="span6"><vh:widget.schedule events="{course.scheduleid.events}" configuration="{monthOffset: 1}"/></div>
     </div>
 </f:section>
